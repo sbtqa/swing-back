@@ -6,7 +6,7 @@ import java.lang.reflect.InvocationTargetException;
  * @author sbt-varivoda-ia
  * @date 26.12.2016
  */
-public class FormFactory {
+public class FormManager {
     
     private Form curtentForm;
     private String currentFormTitle;
@@ -14,7 +14,7 @@ public class FormFactory {
     //TODO через проперти
     private final String packageName;
     
-    public FormFactory(String packageName) {
+    public FormManager(String packageName) {
         this.packageName = packageName;
     }
     
