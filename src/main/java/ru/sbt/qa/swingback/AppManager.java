@@ -28,34 +28,34 @@ import java.util.stream.Stream;
  * @date 16.01.2017
  */
 public class AppManager {
-    
+
     private static AppManager instance;
-    
+    private static Props props = Props.getInstance();
+
     private final static Logger LOG = LoggerFactory.getLogger(AppManager.class);
-    
+
     private static String JVM_PROP_PREFIX = "swingback.jvm.prop.";
-    
-    private static String JARS_FOLDER = Props.get("swingback.app.jars.folder");
-    private static String START_CLASS = Props.get("swingback.app.startclass");
-    private static String JNLP_HREF = Props.get("swingback.app.jnlp");
-    
+    private static String JARS_FOLDER = props.get("swingback.app.jars.folder");
+    private static String START_CLASS = props.get("swingback.app.startclass");
+    private static String JNLP_HREF = props.get("swingback.app.jnlp");
+
     private Cloud cloud;
     private ViNode allNodes;
-    
+
     private AppManager() {
         cloud = CloudFactory.createCloud();
         cloud.node("**").x(VX.TYPE).setLocal();
         cloud.node("node1");
         allNodes = cloud.node("**");
     }
-    
-    public static synchronized AppManager getInstance(){
+
+    public static synchronized AppManager getInstance() {
         if (instance == null) {
             instance = new AppManager();
         }
         return instance;
     }
-    
+
     // Загружает в указанную дир jars
     private void downloadJars() throws IOException {
         File[] listFiles = new File(JARS_FOLDER).listFiles();
@@ -80,53 +80,53 @@ public class AppManager {
             }
         }
     }
-    
+
     public void startApplication() {
-        new Thread( () -> execute((Serializable & Callable<Void>) () -> {
-    
+        new Thread(() -> execute((Serializable & Callable<Void>) () -> {
+
             // Setting jvm params
-            Props.getProps()
-                 .entrySet()
-                 .stream()
-                 .filter(e -> e.getKey().toString().startsWith(JVM_PROP_PREFIX))
-                 .forEach(e -> System.setProperty(e.getKey().toString().replace(JVM_PROP_PREFIX, ""), e.getValue().toString()));
-    
+            props.getProps()
+                    .entrySet()
+                    .stream()
+                    .filter(e -> e.getKey().toString().startsWith(JVM_PROP_PREFIX))
+                    .forEach(e -> System.setProperty(e.getKey().toString().replace(JVM_PROP_PREFIX, ""), e.getValue().toString()));
+
             // loading application jars from folder
             File folder = new File(JARS_FOLDER);
             URL[] appJars = Stream.of(folder.list())
-                                  .filter(name -> name.endsWith("jar"))
-                                  .map(name -> new File(folder.getAbsolutePath() + "/" + name).toURI())
-                                  .map(uri -> {
-                                      URL u = null;
-                                      try {
-                                          u = uri.toURL();
-                                      } catch (MalformedURLException ex) {
-                                          throw new AppManagerException("An Exception occurred while trying the string uri to URL.", ex);
-                                      }
-                                      return u;
-                                  })
-                                  .toArray(URL[]::new);
-    
+                    .filter(name -> name.endsWith("jar"))
+                    .map(name -> new File(folder.getAbsolutePath() + "/" + name).toURI())
+                    .map(uri -> {
+                        URL u = null;
+                        try {
+                            u = uri.toURL();
+                        } catch (MalformedURLException ex) {
+                            throw new AppManagerException("An Exception occurred while trying the string uri to URL.", ex);
+                        }
+                        return u;
+                    })
+                    .toArray(URL[]::new);
+
             URLClassLoader loader = new URLClassLoader(appJars, System.class.getClassLoader());
-    
+
             // run application
             Class<?> mainClass = loader.loadClass(START_CLASS);
             Object app = mainClass.newInstance();
             Thread.currentThread().setContextClassLoader(loader);
-    
+
             LOG.info("Start loading main class.");
             new ClassReference(app).startApplication();
             return null;
         })).start();
     }
-    
+
     public void stopApplication() {
         allNodes.kill();
         cloud.shutdown();
     }
-    
+
     public <T> T execute(Callable<T> task) {
         return allNodes.exec(task);
     }
-    
+
 }
