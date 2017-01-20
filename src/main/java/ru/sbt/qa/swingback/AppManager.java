@@ -9,10 +9,11 @@ import org.netbeans.jemmy.ClassReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.sbt.qa.swingback.util.DownloadManager;
-import ru.sbt.qa.utils.properties.Props;
+import ru.sbtqa.tag.qautils.properties.Props;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -81,33 +82,33 @@ public class AppManager {
     }
     
     public void startApplication() {
-        execute( () -> {
-            
+        new Thread( () -> execute((Serializable & Callable<Void>) () -> {
+    
             // Setting jvm params
             Props.getProps()
                  .entrySet()
                  .stream()
                  .filter(e -> e.getKey().toString().startsWith(JVM_PROP_PREFIX))
                  .forEach(e -> System.setProperty(e.getKey().toString().replace(JVM_PROP_PREFIX, ""), e.getValue().toString()));
-            
+    
             // loading application jars from folder
             File folder = new File(JARS_FOLDER);
             URL[] appJars = Stream.of(folder.list())
-                                   .filter(name -> name.endsWith("jar"))
-                                   .map(name -> new File(folder.getAbsolutePath() + "/" + name).toURI())
-                                   .map(uri -> {
-                                       URL u = null;
-                                       try {
-                                           u = uri.toURL();
-                                       } catch (MalformedURLException ex) {
-                                           throw new AppManagerException("An Exception occurred while trying the string uri to URL.", ex);
-                                       }
-                                       return u;
-                                   })
-                                   .toArray(URL[]::new);
+                                  .filter(name -> name.endsWith("jar"))
+                                  .map(name -> new File(folder.getAbsolutePath() + "/" + name).toURI())
+                                  .map(uri -> {
+                                      URL u = null;
+                                      try {
+                                          u = uri.toURL();
+                                      } catch (MalformedURLException ex) {
+                                          throw new AppManagerException("An Exception occurred while trying the string uri to URL.", ex);
+                                      }
+                                      return u;
+                                  })
+                                  .toArray(URL[]::new);
     
             URLClassLoader loader = new URLClassLoader(appJars, System.class.getClassLoader());
-            
+    
             // run application
             Class<?> mainClass = loader.loadClass(START_CLASS);
             Object app = mainClass.newInstance();
@@ -116,7 +117,7 @@ public class AppManager {
             LOG.info("Start loading main class.");
             new ClassReference(app).startApplication();
             return null;
-        });
+        })).start();
     }
     
     public void stopApplication() {
