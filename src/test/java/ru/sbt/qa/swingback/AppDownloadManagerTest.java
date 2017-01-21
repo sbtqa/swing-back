@@ -10,15 +10,12 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import ru.sbtqa.tag.qautils.properties.Props;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Properties;
 
-/**
- * Created by Varivoda Ivan on 21.01.2017.
- */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Props.class})
 public class AppDownloadManagerTest {
@@ -78,24 +75,6 @@ public class AppDownloadManagerTest {
     }
 
 
-    private static void addProp(String key, String value) throws IOException {
-        Properties prop = new Properties();
-        Path path = Paths.get(propFilePath);
-        if (!Files.exists(path)) {
-            Files.createFile(path);
-        }
-
-        try (BufferedReader br = Files.newBufferedReader(path)) {
-            prop.load(br);
-        }
-        prop.put(key, value);
-        try (Writer writer = Files.newBufferedWriter(path)) {
-            prop.store(writer, "");
-        }
-    }
-
-
-
     @Test
     public void getDefaultAppJarsFolderIfPropertyFileHasNotSpecifiedCustomFolder() throws IOException {
         PowerMockito.when(Props.get(AppDownloadManager.PROP_NAME_APP_JARS_PATH_ABS)).thenReturn("");
@@ -125,7 +104,6 @@ public class AppDownloadManagerTest {
     public void throwFileNotFoundedExceptionIfDefaultFolderIsNotExist() throws IOException {
         PowerMockito.when(Props.get(AppDownloadManager.PROP_NAME_APP_JARS_PATH_ABS)).thenReturn("");
         PowerMockito.when(Props.get(AppDownloadManager.PROP_NAME_APP_JARS_PATH_REL)).thenReturn("");
-        addProp(AppDownloadManager.PROP_NAME_JNLP_HREF, "asdad");
         AppDownloadManager.getRequiredAppJarsFolder();
     }
 

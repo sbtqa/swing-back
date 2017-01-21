@@ -17,7 +17,7 @@ import java.nio.file.Paths;
  */
 public class AppDownloadManager {
 
-    private static Props props = Props.getInstance();
+    private static final Props props = Props.getInstance();
 
     public static final String PROP_NAME_APP_JARS_PATH_ABS = "swingback.app.jars.path.abs";
     public static final String PROP_NAME_APP_JARS_PATH_REL = "swingback.app.jars.path.rel";

@@ -26,14 +26,14 @@ public class AppManager {
     private final static Logger LOG = LoggerFactory.getLogger(AppManager.class);
 
     private static AppManager instance;
-    private static Props props = Props.getInstance();
+    private static final Props props = Props.getInstance();
 
     private static final String JVM_PROP_PREFIX = "swingback.jvm.prop.";
     private static final String START_CLASS = props.get("swingback.app.startclass");
 
-    private String jarsFolder;
-    private Cloud cloud;
-    private ViNode allNodes;
+    private final String jarsFolder;
+    private final Cloud cloud;
+    private final ViNode allNodes;
 
     private AppManager() {
         jarsFolder = AppDownloadManager.downloadJarsAndGetPath();
