@@ -24,7 +24,26 @@ public abstract class Form {
 
     // If current container is tabbedPane
     private boolean isCurrentTabbedPane;
-    
+
+    /**
+     * enum for components types
+     * @author sbt-varivoda-ia
+     * @date 26.12.2016
+     */
+    public enum ComponentType {
+        TEXT_FIELD,
+        TEXT_AREA,
+        BUTTON,
+        CONTAINER,
+        COMBO_BOX,
+        TABBED_PANE,
+        TABLE,
+        CHECK_BOX,
+        TREE,
+        LABEL,
+        RADIO_BUTTON,
+        OTHER
+    }
 }
 
 

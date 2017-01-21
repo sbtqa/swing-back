@@ -1,4 +1,4 @@
-package ru.sbt.qa.swingback.choosers;
+package ru.sbt.qa.swingback.jemmy.choosers;
 
 import org.netbeans.jemmy.ComponentChooser;
 

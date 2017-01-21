@@ -4,7 +4,9 @@ import ru.sbt.qa.swingback.util.JarsDownloadUtil;
 import ru.sbtqa.tag.qautils.properties.Props;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -20,31 +22,38 @@ public class AppDownloadManager {
     public static final String PROP_NAME_APP_JARS_PATH_ABS = "swingback.app.jars.path.abs";
     public static final String PROP_NAME_APP_JARS_PATH_REL = "swingback.app.jars.path.rel";
     public static final String PROP_NAME_JNLP_HREF = "swingback.app.jnlp";
+    public static final String DEFAULT_APP_JARS_FOLDER = "app/jars";
 
     enum DownloadType {
         JNLP
     }
 
-
-    public static final String DEFAULT_APP_JARS_FOLDER = "app/jars";
-
     /**
      * Return a folder path where will be stored the application jars.
      *
+     * @throws FileNotFoundException If folder is not founded.
      * @author Varivoda Ivan
      */
-    public static String getRequiredAppJarsFolder() {
+    public static String getRequiredAppJarsFolder() throws FileNotFoundException {
         //check abs path from properties
         String absPath = props.get(PROP_NAME_APP_JARS_PATH_ABS);
         if (!absPath.isEmpty()) {
-            return absPath;
+            if (Files.exists(Paths.get(absPath))) {
+                return absPath;
+            }
         }
         // check custom rel path from properties
         String custRelPath = props.get(PROP_NAME_APP_JARS_PATH_REL);
         if (!custRelPath.isEmpty()) {
-            return JarsDownloadUtil.class.getClassLoader().getResource(custRelPath).getPath();
+            URL resource = AppDownloadManager.class.getClassLoader().getResource(custRelPath);
+            if (resource != null)
+                return new File(resource.getPath()).getAbsolutePath();
         }
-        return JarsDownloadUtil.class.getClassLoader().getResource(DEFAULT_APP_JARS_FOLDER).getPath();
+        URL resource = AppDownloadManager.class.getClassLoader().getResource(DEFAULT_APP_JARS_FOLDER);
+        if (resource != null) {
+            return new File(resource.getPath()).getAbsolutePath();
+        }
+        throw new FileNotFoundException();
     }
 
     /**
@@ -68,23 +77,23 @@ public class AppDownloadManager {
      *
      * @autor Varivoda Ivan
      */
-    public static String setEnvironment() {
-        String jarsFolder = getRequiredAppJarsFolder();
-        Path jarsPath = Paths.get(jarsFolder);
-        if (jarsFolder.isEmpty() || !Files.exists(jarsPath)) {
-            throw new UnsupportedOperationException("Required folder isn't exist. Check the properties file.");
+    public static String downloadJarsAndGetPath() {
+        String jarsFolderPath;
+        try {
+            jarsFolderPath = getRequiredAppJarsFolder();
+        } catch (FileNotFoundException e) {
+            throw new ApplicationDownloadException("Required folder isn't exist. Check the properties file.");
         }
-
         // downloading jars if folder isn't empty
+        Path jarsPath = Paths.get(jarsFolderPath);
         File[] files = jarsPath.toFile().listFiles();
         if (files.length == 0) {
             try {
-                downloadAppJars(jarsFolder, DownloadType.JNLP);
+                downloadAppJars(jarsFolderPath, DownloadType.JNLP);
             } catch (IOException e) {
-                //todo
-                throw new RuntimeException();
+                throw new ApplicationDownloadException("An exception was occurred while downloading the application jars.", e);
             }
         }
-        return jarsFolder;
+        return jarsFolderPath;
     }
 }

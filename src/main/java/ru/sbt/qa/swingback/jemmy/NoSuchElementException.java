@@ -1,4 +1,4 @@
-package ru.sbt.qa.swingback;
+package ru.sbt.qa.swingback.jemmy;
 
 /**
  * @author sbt-varivoda-ia

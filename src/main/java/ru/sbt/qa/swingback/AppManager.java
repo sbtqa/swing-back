@@ -31,12 +31,12 @@ public class AppManager {
     private static final String JVM_PROP_PREFIX = "swingback.jvm.prop.";
     private static final String START_CLASS = props.get("swingback.app.startclass");
 
-    private final String JARS_FOLDER;
+    private String jarsFolder;
     private Cloud cloud;
     private ViNode allNodes;
 
     private AppManager() {
-        JARS_FOLDER = AppDownloadManager.setEnvironment();
+        jarsFolder = AppDownloadManager.downloadJarsAndGetPath();
         cloud = CloudFactory.createCloud();
         cloud.node("**").x(VX.TYPE).setLocal();
         cloud.node("node1");
@@ -62,7 +62,7 @@ public class AppManager {
                     .forEach(e -> System.setProperty(e.getKey().toString().replace(JVM_PROP_PREFIX, ""), e.getValue().toString()));
 
             // loading application jars from folder
-            File folder = new File(JARS_FOLDER);
+            File folder = new File(jarsFolder);
             URL[] appJars = Stream.of(folder.list())
                     .filter(name -> name.endsWith("jar"))
                     .map(name -> new File(folder.getAbsolutePath() + "/" + name).toURI())

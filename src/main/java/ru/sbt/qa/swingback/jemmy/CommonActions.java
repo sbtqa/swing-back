@@ -1,9 +1,10 @@
-package ru.sbt.qa.swingback;
+package ru.sbt.qa.swingback.jemmy;
 
 import org.netbeans.jemmy.ComponentChooser;
 import org.netbeans.jemmy.operators.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.sbt.qa.swingback.*;
 
 import javax.swing.*;
 import javax.swing.tree.TreePath;
@@ -332,7 +333,7 @@ public class CommonActions {
      * @return true - if element is presence, otherwise - false.
      * @author Varivoda Ivan
      */
-    public static boolean isComponentPresence(ContainerOperator container, FormComponentType type,
+    public static boolean isComponentPresence(ContainerOperator container, Form.ComponentType type,
                                               ComponentChooser chooser) {
         Window window = container.getWindow();
         // Search using JComponentOperator.findJComponent() unsuitable. Choose component may be on index.
@@ -368,7 +369,7 @@ public class CommonActions {
      * @return true - if element is editable, otherwise - false.
      * @author Varivoda Ivan
      */
-    public static boolean isComponentEditable(ContainerOperator container, FormComponentType type,
+    public static boolean isComponentEditable(ContainerOperator container, Form.ComponentType type,
                                               ComponentChooser chooser) {
         switch (type) {
             case TEXT_FIELD:

@@ -1,6 +1,6 @@
 package ru.sbt.qa.swingback.annotations;
 
-import ru.sbt.qa.swingback.FormComponentType;
+import ru.sbt.qa.swingback.Form;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -19,5 +19,5 @@ public @interface ComponentInfo {
     
     String title();
     
-    FormComponentType type();
+    Form.ComponentType type();
 }
