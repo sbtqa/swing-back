@@ -7,12 +7,14 @@ import org.gridkit.vicluster.ViNode;
 import org.netbeans.jemmy.ClassReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.sbtqa.tag.qautils.properties.Props;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Map;
+import java.util.Properties;
 import java.util.stream.Stream;
 
 /**
@@ -24,17 +26,11 @@ public class AppManager {
     private final static Logger LOG = LoggerFactory.getLogger(AppManager.class);
 
     private static AppManager instance;
-    private static final Props props = Props.getInstance();
 
-    private static final String JVM_PROP_PREFIX = "swingback.jvm.prop.";
-    private static final String START_CLASS = props.get("swingback.app.startclass");
-
-    private final String jarsFolder;
     private final Cloud cloud;
     private final ViNode allNodes;
 
     private AppManager() {
-        jarsFolder = AppDownloadManager.downloadJarsAndGetPath();
         cloud = CloudFactory.createCloud();
         cloud.node("**").x(VX.TYPE).setLocal();
         cloud.node("node1");
@@ -49,21 +45,29 @@ public class AppManager {
     }
 
     public void startApplication() {
-        startApplication(jarsFolder);
+        String jarsFolder;
+        try {
+            jarsFolder = AppDownloadManager.getJarsFolder();
+        } catch (FileNotFoundException e) {
+            throw new AppManagerException("Required folder isn't exist. Check the properties file.", e);
+        }
+
+        String startClassName = AppDownloadManager.getStartClassName();
+        Map<String, String> sysProps = AppDownloadManager.getSystemProperties();
+
+        startApplication(jarsFolder, startClassName, sysProps);
     }
 
-    private void startApplication(final String jars) {
+    private void startApplication(final String jarsFolder, final String startClassName, Map<String, String> sysProps) {
         new Thread(() -> execute(() -> {
 
             // Setting jvm params
-            props.getProps()
-                    .entrySet()
-                    .stream()
-                    .filter(e -> e.getKey().toString().startsWith(JVM_PROP_PREFIX))
-                    .forEach(e -> System.setProperty(e.getKey().toString().replace(JVM_PROP_PREFIX, ""), e.getValue().toString()));
+            Properties properties = System.getProperties();
+            properties.putAll(sysProps);
+            System.setProperties(properties);
 
             // loading application jars from folder
-            File folder = new File(jars);
+            File folder = new File(jarsFolder);
             URL[] appJars = Stream.of(folder.list())
                     .filter(name -> name.endsWith("jar"))
                     .map(name -> new File(folder.getAbsolutePath() + "/" + name).toURI())
@@ -81,7 +85,7 @@ public class AppManager {
             URLClassLoader loader = new URLClassLoader(appJars, System.class.getClassLoader());
 
             // run application
-            Class<?> mainClass = loader.loadClass(START_CLASS);
+            Class<?> mainClass = loader.loadClass(startClassName);
             Object app = mainClass.newInstance();
             Thread.currentThread().setContextClassLoader(loader);
 

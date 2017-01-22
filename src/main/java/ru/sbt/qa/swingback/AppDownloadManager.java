@@ -10,9 +10,11 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
- * Manager for downloading the application jars to required folder.
+ * Manager for downloading the application jars to required folder and preparation of the necessary data.
  * Created by Varivoda Ivan on 21.01.2017.
  */
 public class AppDownloadManager {
@@ -23,6 +25,21 @@ public class AppDownloadManager {
     public static final String PROP_NAME_APP_JARS_PATH_REL = "swingback.app.jars.path.rel";
     public static final String PROP_NAME_JNLP_HREF = "swingback.app.jnlp";
     public static final String DEFAULT_APP_JARS_FOLDER = "app/jars";
+    public static final String JVM_PROP_PREFIX = "swingback.jvm.prop.";
+    public static final String PROP_NAME_START_CLASS = "swingback.app.startclass";
+
+
+    public static String getStartClassName() {
+        return props.get(PROP_NAME_START_CLASS);
+    }
+
+    public static Map<String, String> getSystemProperties() {
+        return props.getProps()
+                .entrySet()
+                .stream()
+                .filter(e -> e.getKey().toString().startsWith(JVM_PROP_PREFIX))
+                .collect(Collectors.toMap(o -> o.getKey().toString(), o -> o.getValue().toString()));
+    }
 
     enum DownloadType {
         JNLP
@@ -34,7 +51,7 @@ public class AppDownloadManager {
      * @throws FileNotFoundException If folder is not founded.
      * @author Varivoda Ivan
      */
-    public static String getRequiredAppJarsFolder() throws FileNotFoundException {
+    public static String getJarsFolder() throws FileNotFoundException {
         //check abs path from properties
         String absPath = props.get(PROP_NAME_APP_JARS_PATH_ABS);
         if (!absPath.isEmpty()) {
@@ -80,7 +97,7 @@ public class AppDownloadManager {
     public static String downloadJarsAndGetPath() {
         String jarsFolderPath;
         try {
-            jarsFolderPath = getRequiredAppJarsFolder();
+            jarsFolderPath = getJarsFolder();
         } catch (FileNotFoundException e) {
             throw new ApplicationDownloadException("Required folder isn't exist. Check the properties file.");
         }
