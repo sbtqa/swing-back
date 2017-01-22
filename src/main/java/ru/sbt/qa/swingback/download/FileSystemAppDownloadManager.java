@@ -36,7 +36,7 @@ public class FileSystemAppDownloadManager extends AppDownloadManager {
                 .entrySet()
                 .stream()
                 .filter(e -> e.getKey().toString().startsWith(JVM_PROP_PREFIX))
-                .collect(Collectors.toMap(o -> o.getKey().toString(), o -> o.getValue().toString()));
+                .collect(Collectors.toMap(o -> o.getKey().toString().replace(JVM_PROP_PREFIX, ""), o -> o.getValue().toString()));
     }
 
     @Override

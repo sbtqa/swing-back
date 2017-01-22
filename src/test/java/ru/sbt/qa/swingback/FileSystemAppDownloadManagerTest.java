@@ -37,12 +37,12 @@ public class FileSystemAppDownloadManagerTest {
 
     private static String abstJarsFolder = new File("abs").getAbsolutePath();
 
-    private FileSystemAppDownloadManager downloadManager;
+    private FileSystemAppDownloadManager fileSystemAppDownloadManager;
 
     @Before
     public void setUp() throws Exception {
         PowerMockito.mockStatic(Props.class);
-        downloadManager = new FileSystemAppDownloadManager();
+        fileSystemAppDownloadManager = new FileSystemAppDownloadManager();
         createDirIfNotExist(configPath);
         createFileIfNotExist(propFilePath);
     }
@@ -98,7 +98,7 @@ public class FileSystemAppDownloadManagerTest {
         PowerMockito.when(Props.get(FileSystemAppDownloadManager.PROP_NAME_APP_JARS_PATH_REL)).thenReturn("");
 
         createDirIfNotExist(abstJarsFolder);
-        assertEquals(abstJarsFolder, downloadManager.getJarsFolder());
+        assertEquals(abstJarsFolder, fileSystemAppDownloadManager.getJarsFolder());
     }
 
     @Test(expected = FileNotFoundException.class)
@@ -129,7 +129,7 @@ public class FileSystemAppDownloadManagerTest {
         p.put("Prop1", "val1");
         p.put("prop2", "val2");
         PowerMockito.when(Props.getProps()).thenReturn(p);
-        assertThat(downloadManager.getSystemProperties().isEmpty(), is(true));
+        assertThat(fileSystemAppDownloadManager.getSystemProperties().isEmpty(), is(true));
     }
 
     @Test
@@ -137,9 +137,12 @@ public class FileSystemAppDownloadManagerTest {
         Properties p = new Properties();
         p.put("Prop1", "val1");
         p.put("prop2", "val2");
-        p.put(FileSystemAppDownloadManager.JVM_PROP_PREFIX + "prop3", "val3");
+        String expPropName = "prop3";
+        String expPropVal = "val3";
+        p.put(FileSystemAppDownloadManager.JVM_PROP_PREFIX + expPropName, expPropVal);
         PowerMockito.when(Props.getProps()).thenReturn(p);
-        assertThat(downloadManager.getSystemProperties().size(), is(1));
-        assertThat(downloadManager.getSystemProperties().isEmpty(), is(false));
+        assertThat(fileSystemAppDownloadManager.getSystemProperties().size(), is(1));
+        assertThat(fileSystemAppDownloadManager.getSystemProperties().isEmpty(), is(false));
+        assertThat(fileSystemAppDownloadManager.getSystemProperties().get(expPropName), is(expPropVal));
     }
 }
