@@ -1,4 +1,4 @@
-package ru.sbt.qa.swingback;
+package ru.sbt.qa.swingback.download;
 
 /**
  * Created by Varivoda Ivan on 21.01.2017.
