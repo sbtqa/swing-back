@@ -10,11 +10,9 @@ import org.slf4j.LoggerFactory;
 import ru.sbtqa.tag.qautils.properties.Props;
 
 import java.io.File;
-import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.concurrent.Callable;
 import java.util.stream.Stream;
 
 /**
@@ -50,9 +48,12 @@ public class AppManager {
         return instance;
     }
 
-
     public void startApplication() {
-        new Thread(() -> execute((Serializable & Callable<Void>) () -> {
+        startApplication(jarsFolder);
+    }
+
+    private void startApplication(final String jars) {
+        new Thread(() -> execute(() -> {
 
             // Setting jvm params
             props.getProps()
@@ -62,7 +63,7 @@ public class AppManager {
                     .forEach(e -> System.setProperty(e.getKey().toString().replace(JVM_PROP_PREFIX, ""), e.getValue().toString()));
 
             // loading application jars from folder
-            File folder = new File(jarsFolder);
+            File folder = new File(jars);
             URL[] appJars = Stream.of(folder.list())
                     .filter(name -> name.endsWith("jar"))
                     .map(name -> new File(folder.getAbsolutePath() + "/" + name).toURI())
