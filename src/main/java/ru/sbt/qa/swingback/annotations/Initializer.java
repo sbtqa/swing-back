@@ -6,12 +6,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Вешаем на методы, инициализурующие компоненты в банке.
- * @author Varivoda Ivan.
+ * Annotation for initialization form elements methods
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface Initialiser {
-    
+public @interface Initializer {
+
     String title();
 }
