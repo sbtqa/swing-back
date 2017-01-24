@@ -7,6 +7,7 @@ import org.netbeans.jemmy.operators.ComponentOperator;
 import org.netbeans.jemmy.operators.ContainerOperator;
 import org.netbeans.jemmy.operators.JTabbedPaneOperator;
 import ru.sbt.qa.swingback.annotations.ActionTitle;
+import ru.sbt.qa.swingback.annotations.ActionTitles;
 import ru.sbt.qa.swingback.annotations.ComponentInfo;
 import ru.sbt.qa.swingback.annotations.Initializer;
 
@@ -64,6 +65,18 @@ public abstract class Form {
             }
         }
     }
+
+
+    @ActionTitle("открывается форма")
+    @ActionTitle("opening form")
+    public void openForm() {
+
+    }
+
+
+
+
+//    ----------------------------------------------------
 
     public List<Method> getFormMethods() {
 //        if (formMethods == null) {
@@ -247,7 +260,11 @@ public abstract class Form {
          */
         private static Boolean isRequiredAction(Method method, String title) {
             ActionTitle actionTitle = method.getAnnotation(ActionTitle.class);
+            ActionTitles actionTitles = method.getAnnotation(ActionTitles.class);
             List<ActionTitle> actionList = new ArrayList<>();
+            if (actionTitles != null) {
+                actionList.addAll(Arrays.asList(actionTitles.value()));
+            }
             if (actionTitle != null) {
                 actionList.add(actionTitle);
             }
