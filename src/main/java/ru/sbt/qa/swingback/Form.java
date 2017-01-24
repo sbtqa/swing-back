@@ -5,11 +5,13 @@ import org.apache.commons.lang.reflect.MethodUtils;
 import org.netbeans.jemmy.ComponentChooser;
 import org.netbeans.jemmy.operators.ComponentOperator;
 import org.netbeans.jemmy.operators.ContainerOperator;
+import org.netbeans.jemmy.operators.JButtonOperator;
 import org.netbeans.jemmy.operators.JTabbedPaneOperator;
 import ru.sbt.qa.swingback.annotations.ActionTitle;
 import ru.sbt.qa.swingback.annotations.ActionTitles;
 import ru.sbt.qa.swingback.annotations.ComponentInfo;
 import ru.sbt.qa.swingback.annotations.Initializer;
+import ru.sbt.qa.swingback.jemmy.CommonActions;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -25,8 +27,8 @@ import java.util.List;
 public abstract class Form {
 
     private String title;
-    ContainerOperator currentCont;
-    ContainerOperator currentTabbedPane;
+    protected ContainerOperator currentCont;
+    protected ContainerOperator currentTabbedPane;
     private List<Field> formFields;
     private List<Method> formMethods;
 //    private Field currentContainer;
@@ -67,10 +69,10 @@ public abstract class Form {
     }
 
 
-    @ActionTitle("открывается форма")
-    @ActionTitle("opening form")
-    public void openForm() {
-
+    @ActionTitle("нажимает на кнопку")
+    public void pushButton(String title) throws NoSuchFieldException {
+        ComponentChooser ch = getComponentChooser(title);
+        CommonActions.pushButtonIfIsEnabled(new JButtonOperator(getCurrentContainerOperator(), ch));
     }
 
 

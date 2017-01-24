@@ -50,8 +50,8 @@ public class AppManager {
         startApplication(downloadManager.getJarsURL(), downloadManager.getStartClassName(), downloadManager.getSystemProperties());
     }
 
-    public void startApplication(final URL[] appJars, final String startClassName,final Map<String, String> sysProps) {
-        new Thread(() -> execute(() -> {
+    public void startApplication(final URL[] appJars, final String startClassName, final Map<String, String> sysProps) {
+        execute(() -> {
             // Setting jvm params
             Properties properties = System.getProperties();
             properties.putAll(sysProps);
@@ -65,7 +65,7 @@ public class AppManager {
             LOG.info("Start loading main class.");
             new ClassReference(app).startApplication();
             return null;
-        })).start();
+        });
     }
 
     public void stopApplication() {

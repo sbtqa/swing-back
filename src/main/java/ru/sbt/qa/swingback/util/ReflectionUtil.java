@@ -36,9 +36,11 @@ public class ReflectionUtil {
             log.warn("Failed to shape class info set", ex);
         }
 
+        FormEntry formEntry;
         for (Class<?> form : allClasses) {
-            String formTitle = form.getAnnotation(FormEntry.class).title();
-            if (formTitle.equals(title)) {
+            System.out.println("Now look up " + form);
+            formEntry = form.getAnnotation(FormEntry.class);
+            if (formEntry != null && formEntry.title().equals(title)) {
                 return form;
             }
         }

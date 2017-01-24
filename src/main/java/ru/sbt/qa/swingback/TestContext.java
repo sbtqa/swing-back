@@ -2,6 +2,7 @@ package ru.sbt.qa.swingback;
 
 import ru.sbt.qa.swingback.jemmy.FormInitializationException;
 import ru.sbt.qa.swingback.util.ReflectionUtil;
+import ru.sbtqa.tag.qautils.properties.Props;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -11,36 +12,43 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class TestContext {
 
-    private Form currentForm;
-    private String currentFormTitle;
-    private String formsPackage;
+    private static Form currentForm;
+    private static String currentFormTitle;
+    private static String formsPackage;
 
-    public TestContext(String packageName) {
-        this.formsPackage = packageName;
+    public static void init() {
+        formsPackage = Props.getInstance().get("swingback.forms.package");
     }
 
-    public Form getForm(String title) throws FormInitializationException {
+    public static Form getCurrentForm() {
+//         TODO: 24.01.2017
+        return currentForm;
+    }
+
+
+    public static Form getForm(String title) throws FormInitializationException {
+
         return getForm(formsPackage, title);
     }
 
     // Возвращает класс формы в пакете с именем
-    private Class<?> getFormClass(String packageName, String title) {
+    private static Class<?> getFormClass(String packageName, String title) {
         return ReflectionUtil.getClassByFormEntryTitle(packageName, title);
     }
 
     // Устанавливает форму по пакету и тайтлу
-    public Form getForm(String packageName, String title) throws FormInitializationException {
+    public static Form getForm(String packageName, String title) throws FormInitializationException {
         return bootstrapForm(getFormClass(packageName, title));
     }
 
 
     // Устанавливает форму по классу
-    public Form getForm(Class<? extends Form> formClass) throws FormInitializationException {
+    public static Form getForm(Class<? extends Form> formClass) throws FormInitializationException {
         return bootstrapForm(formClass);
     }
 
     //create and set form by class
-    private Form bootstrapForm(Class<?> form) throws FormInitializationException {
+    private static Form bootstrapForm(Class<?> form) throws FormInitializationException {
         if (form != null) {
             try {
                 @SuppressWarnings("unchecked")
