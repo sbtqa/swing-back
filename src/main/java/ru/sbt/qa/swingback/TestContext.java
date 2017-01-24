@@ -1,13 +1,13 @@
 package ru.sbt.qa.swingback;
 
 import ru.sbt.qa.swingback.jemmy.FormInitializationException;
+import ru.sbt.qa.swingback.util.ReflectionUtil;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * @author sbt-varivoda-ia
- * @date 26.12.2016
+ *
  */
 public class TestContext {
 
@@ -19,11 +19,19 @@ public class TestContext {
         this.formsPackage = packageName;
     }
 
+    public Form getForm(String title) throws FormInitializationException {
+        return getForm(formsPackage, title);
+    }
+
     // Возвращает класс формы в пакете с именем
-    private Class<?> getFormClass(String packageName, String title){ return null;}
+    private Class<?> getFormClass(String packageName, String title) {
+        return ReflectionUtil.getClassByFormEntryTitle(packageName, title);
+    }
 
     // Устанавливает форму по пакету и тайтлу
-    public Form getForm(String packageName, String title){ return null;}
+    public Form getForm(String packageName, String title) throws FormInitializationException {
+        return bootstrapForm(getFormClass(packageName, title));
+    }
 
 
     // Устанавливает форму по классу
@@ -34,13 +42,13 @@ public class TestContext {
     //create and set form by class
     private Form bootstrapForm(Class<?> form) throws FormInitializationException {
         if (form != null) {
-            try{
-            @SuppressWarnings("unchecked")
-            Constructor<Form> constructor = ((Constructor<Form>) form.getConstructor());
-            constructor.setAccessible(true);
-            currentForm = constructor.newInstance();
-            currentFormTitle = currentForm.getTitle();
-        }catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+            try {
+                @SuppressWarnings("unchecked")
+                Constructor<Form> constructor = ((Constructor<Form>) form.getConstructor());
+                constructor.setAccessible(true);
+                currentForm = constructor.newInstance();
+                currentFormTitle = currentForm.getTitle();
+            } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
                 throw new FormInitializationException("Failed to initialize form '" + form + "'", e);
             }
             return currentForm;

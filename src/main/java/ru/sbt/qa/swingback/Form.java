@@ -24,9 +24,11 @@ import java.util.List;
 public abstract class Form {
 
     private String title;
+    ContainerOperator currentCont;
+    ContainerOperator currentTabbedPane;
     private List<Field> formFields;
     private List<Method> formMethods;
-    private Field currentContainer;
+//    private Field currentContainer;
     private List<Field> formTabbedPanes;
     private boolean isCurrentTabbedPane;
 
@@ -52,30 +54,41 @@ public abstract class Form {
         OTHER
     }
 
-    public List<Method> getFormMethods() {
-        if (formMethods == null) {
-            formMethods = Core.getDeclaredMethods(this.getClass());
+    public Form() {
+        formMethods = Core.getDeclaredMethods(this.getClass());
+        formFields = Core.getDeclaredFields(this.getClass());
+        formTabbedPanes = new LinkedList<>();
+        for (Field field : formFields) {
+            if (Core.isRequiredField(field, ComponentType.TABBED_PANE)) {
+                formTabbedPanes.add(field);
+            }
         }
+    }
+
+    public List<Method> getFormMethods() {
+//        if (formMethods == null) {
+//            formMethods = Core.getDeclaredMethods(this.getClass());
+//        }
         return formMethods;
     }
 
     public List<Field> getFormFields() {
-        if (formFields == null) {
-            formFields = Core.getDeclaredFields(this.getClass());
-        }
+//        if (formFields == null) {
+//            formFields = Core.getDeclaredFields(this.getClass());
+//        }
         return formFields;
     }
 
     public List<Field> getFormTabbedPanes() {
-        if (formTabbedPanes == null) {
-            formTabbedPanes = new LinkedList<>();
-            List<Field> fields = Core.getDeclaredFields(this.getClass());
-            for (Field field : fields) {
-                if (Core.isRequiredField(field, ComponentType.TABBED_PANE)) {
-                    formTabbedPanes.add(field);
-                }
-            }
-        }
+//        if (formTabbedPanes == null) {
+//            formTabbedPanes = new LinkedList<>();
+//            List<Field> fields = Core.getDeclaredFields(this.getClass());
+//            for (Field field : fields) {
+//                if (Core.isRequiredField(field, ComponentType.TABBED_PANE)) {
+//                    formTabbedPanes.add(field);
+//                }
+//            }
+//        }
         return formTabbedPanes;
     }
 
@@ -168,11 +181,7 @@ public abstract class Form {
      * Return current form container.
      */
     public ContainerOperator getCurrentContainerOperator() {
-        try {
-            return (ContainerOperator) FieldUtils.readField(currentContainer, this);
-        } catch (IllegalAccessException e) {
-            throw new SwingBackRuntimeException("Failed to get current container operator", e);
-        }
+            return isCurrentTabbedPane ? currentTabbedPane : currentCont;
     }
 
     /**
@@ -193,7 +202,8 @@ public abstract class Form {
                 throw new SwingBackRuntimeException("Failed to get tabbed pane from the current form.", e);
             }
             if (tpo != null && tpo.findPage(title) != -1) {
-                currentContainer = tpf;
+//                currentContainer = tpf;
+                currentTabbedPane = tpo;
                 tpo.selectPage(title);
                 isCurrentTabbedPane = true;
                 return;
