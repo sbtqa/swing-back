@@ -4,10 +4,7 @@ import org.apache.commons.lang.reflect.FieldUtils;
 import org.apache.commons.lang.reflect.MethodUtils;
 import org.netbeans.jemmy.ComponentChooser;
 import org.netbeans.jemmy.operators.*;
-import ru.sbt.qa.swingback.annotations.ActionTitle;
-import ru.sbt.qa.swingback.annotations.ActionTitles;
-import ru.sbt.qa.swingback.annotations.ComponentInfo;
-import ru.sbt.qa.swingback.annotations.Initializer;
+import ru.sbt.qa.swingback.annotations.*;
 import ru.sbt.qa.swingback.jemmy.CommonActions;
 
 import java.lang.reflect.Field;
@@ -28,7 +25,6 @@ public abstract class Form {
     protected JTabbedPaneOperator currentTabbedPane;
     private List<Field> formFields;
     private List<Method> formMethods;
-//    private Field currentContainer;
     private List<Field> formTabbedPanes;
     private boolean isCurrentTabbedPane;
 
@@ -55,6 +51,7 @@ public abstract class Form {
     }
 
     public Form() {
+        title = this.getClass().getAnnotation(FormEntry.class).title();
         formMethods = Core.getDeclaredMethods(this.getClass());
         formFields = Core.getDeclaredFields(this.getClass());
         formTabbedPanes = new LinkedList<>();
@@ -67,20 +64,47 @@ public abstract class Form {
 
 
     @ActionTitle("нажимает на кнопку")
+    @ActionTitle("push button")
     public void pushButton(String title) throws NoSuchFieldException {
         ComponentChooser ch = getComponentChooser(title);
-        CommonActions.pushButtonIfIsEnabled(new JButtonOperator(getCurrentContainerOperator(), ch));
+        new JButtonOperator(getCurrentContainerOperator(), ch).push();
     }
 
-    @ActionTitle("Выбирает первую запись в таблице")
+    @ActionTitle("выбирает первую запись в таблице")
+    @ActionTitle("select first table row")
     public void m2(String title) throws NoSuchFieldException {
-
         ComponentChooser ch = getComponentChooser(title);
         CommonActions.selectFistTableElem(new JTableOperator(getCurrentContainerOperator(), ch));
     }
 
+    @ActionTitle("")
+    @ActionTitle("expand tree")
+    public void m3(String title, String path) throws NoSuchFieldException {
+        ComponentChooser ch = getComponentChooser(title);
+        String[] paths = path.split("->");
+        CommonActions.chooseTreeNode(new JTreeOperator(getCurrentContainerOperator(), ch), paths);
+    }
 
+    @ActionTitle("")
+    @ActionTitle("fill field")
+    public void fiilField(String title, String value) throws NoSuchFieldException {
+        ComponentChooser ch = getComponentChooser(title);
+        new JTextComponentOperator(getCurrentContainerOperator(), ch).setText(value);
+    }
 
+    @ActionTitle("")
+    @ActionTitle("set check box")
+    public void setCheckBox(String title, String value) throws NoSuchFieldException {
+        ComponentChooser ch = getComponentChooser(title);
+        CommonActions.setCheckBox(getCurrentContainerOperator(), ch, Boolean.valueOf(value));
+    }
+
+    @ActionTitle("")
+    @ActionTitle("choose combo box item")
+    public void chooseComboBoxItem(String title, String value) throws NoSuchFieldException {
+        ComponentChooser ch = getComponentChooser(title);
+        CommonActions.chooseComboBoxItem(new JComboBoxOperator(getCurrentContainerOperator(), getComponentChooser(title)), value, String::equals);
+    }
 
 //    ----------------------------------------------------
 
@@ -201,6 +225,13 @@ public abstract class Form {
      */
     public ContainerOperator getCurrentContainerOperator() {
             return isCurrentTabbedPane ? currentTabbedPane : currentCont;
+    }
+
+    /**
+     * Switch current container to the container.
+     */
+    public void switchToContainer() {
+        isCurrentTabbedPane = false;
     }
 
     /**

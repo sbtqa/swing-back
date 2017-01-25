@@ -12,8 +12,8 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class StepDefinitions {
 
-    @И("(?:пользователь |он |)открывает приложение$")
     @And("^user open the application$")
+    @И("(?:пользователь |он |)открывает приложение$")
     public void startApp() {
         AppManager.getInstance().startApplication();
         AppManager.getInstance().execute( () -> {
@@ -22,23 +22,23 @@ public class StepDefinitions {
         });
     }
 
-    @И("(?:пользователь |он |)закрывает приложение$")
     @And("^user close the application$")
+    @И("(?:пользователь |он |)закрывает приложение$")
     public void closeApp() {
         AppManager.getInstance().stopApplication();
     }
 
-    @И("^открывается форма \"(.*?)\"$")
     @And("^opening form \"(.*?)\"$")
+    @И("^открывается форма \"(.*?)\"$")
     public void m(String title) throws FormInitializationException {
         AppManager.getInstance().execute( () -> {
-            TestContext.getForm(title);
+            TestContext.setForm(title);
             return null;
         });
     }
 
-    @И("^(?:пользователь |он |)переходит на вкладку \"(.*?)\" в окне с вкалдками \"(.*?)\"$")
     @And("^user select the tab \"(.*?)\" on the tabbed pane \"(.*?)\"$")
+    @И("^(?:пользователь |он |)переходит на вкладку \"(.*?)\" в окне с вкалдками \"(.*?)\"$")
     public void selectTabe(String pane, String title) throws FormInitializationException {
         AppManager.getInstance().execute( () -> {
             TestContext.getCurrentForm().selectTabPane(title, pane);
@@ -46,8 +46,17 @@ public class StepDefinitions {
         });
     }
 
-    @И("^ожидание (.*?) сек$")
+    @And("^user working with form$")
+    @И("^(?:пользователь |он |) работает с формой$")
+    public void workingWithForm() throws FormInitializationException {
+        AppManager.getInstance().execute( () -> {
+            TestContext.getCurrentForm().switchToContainer();
+            return null;
+        });
+    }
+
     @And("^wait (.*?) sec$")
+    @И("^ожидание (.*?) сек$")
     public void wait(String title) throws FormInitializationException, InterruptedException {
         SECONDS.sleep(Long.parseLong(title));
     }
@@ -60,8 +69,8 @@ public class StepDefinitions {
      * @throws FormInitializationException if current page is not initialized
      * @throws NoSuchMethodException if corresponding method doesn't exist
      */
-    @И("^(?:пользователь |он |)\\((.*?)\\)$")
     @And("^user \\((.*?)\\)$")
+    @И("^(?:пользователь |он |)\\((.*?)\\)$")
     public void userActionNoParams(String action) throws FormInitializationException, NoSuchMethodException {
         AppManager.getInstance().execute(new Callable<Void>() {
             @Override
@@ -81,8 +90,8 @@ public class StepDefinitions {
      * @throws FormInitializationException if current page is not initialized
      * @throws NoSuchMethodException if corresponding method doesn't exist
      */
-    @И("^(?:пользователь |он |)\\((.*?)\\) (?:с параметром |)\"([^\"]*)\"$")
     @And("^user \\((.*?)\\) (?:with param |)\"([^\"]*)\"$")
+    @И("^(?:пользователь |он |)\\((.*?)\\) (?:с параметром |)\"([^\"]*)\"$")
     public void userActionOneParam(String action, String param) throws FormInitializationException, NoSuchMethodException {
         AppManager.getInstance().execute(() -> {
                 TestContext.getCurrentForm().executeMethodByTitle(action, param);
@@ -100,15 +109,12 @@ public class StepDefinitions {
      * @throws FormInitializationException if current page is not initialized
      * @throws NoSuchMethodException if corresponding method doesn't exist
      */
-    @И("^(?:пользователь |он |)\\((.*?)\\) (?:с параметрарми |)\"([^\"]*)\" \"([^\"]*)\"$")
     @And("^user \\((.*?)\\) (?:with the parameters |)\"([^\"]*)\" \"([^\"]*)\"$")
+    @И("^(?:пользователь |он |)\\((.*?)\\) (?:с параметрарми |)\"([^\"]*)\" \"([^\"]*)\"$")
     public void userActionTwoParams(String action, String param1, String param2) throws FormInitializationException, NoSuchMethodException {
-        AppManager.getInstance().execute(new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
+        AppManager.getInstance().execute( ()  -> {
                 TestContext.getCurrentForm().executeMethodByTitle(action, param1, param2);
                 return null;
-            }
         });
     }
 
@@ -123,8 +129,8 @@ public class StepDefinitions {
      * @throws FormInitializationException if current page is not initialized
      * @throws NoSuchMethodException if corresponding method doesn't exist
      */
-    @И("^(?:пользователь |он |)\\((.*?)\\) (?:с параметрарми |)\"([^\"]*)\" \"([^\"]*)\" \"([^\"]*)\"$")
     @And("^user \\((.*?)\\) (?:with the parameters |)\"([^\"]*)\" \"([^\"]*)\" \"([^\"]*)\"$")
+    @И("^(?:пользователь |он |)\\((.*?)\\) (?:с параметрарми |)\"([^\"]*)\" \"([^\"]*)\" \"([^\"]*)\"$")
     public void userActionThreeParams(String action, String param1, String param2, String param3) throws FormInitializationException, NoSuchMethodException {
         AppManager.getInstance().execute(new Callable<Void>() {
             @Override
@@ -144,8 +150,8 @@ public class StepDefinitions {
      * @throws FormInitializationException if current page is not initialized
      * @throws NoSuchMethodException if corresponding method doesn't exist
      */
-    @И("^(?:пользователь |он |)\\((.*?)\\) данными$")
     @And("^user \\((.*?)\\) data$")
+    @И("^(?:пользователь |он |)\\((.*?)\\) данными$")
     public void userActionTableParam(String action, DataTable dataTable) throws FormInitializationException, NoSuchMethodException {
         AppManager.getInstance().execute(new Callable<Void>() {
             @Override
@@ -166,8 +172,8 @@ public class StepDefinitions {
      * @throws FormInitializationException if current page is not initialized
      * @throws NoSuchMethodException if corresponding method doesn't exist
      */
-    @И("^(?:пользователь |он |)\\((.*?)\\) [^\"]*\"([^\"]*)\" данными$")
     @And("^user \\((.*?)\\) [^\"]*\"([^\"]*) data$")
+    @И("^(?:пользователь |он |)\\((.*?)\\) [^\"]*\"([^\"]*)\" данными$")
     public void userDoActionWithObject(String action, String param, DataTable dataTable) throws FormInitializationException, NoSuchMethodException {
         AppManager.getInstance().execute(new Callable<Void>() {
             @Override

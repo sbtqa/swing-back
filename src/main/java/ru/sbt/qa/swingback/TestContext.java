@@ -8,7 +8,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- *
+ * Static helper containing test content (current form, title)
  */
 public class TestContext {
 
@@ -16,19 +16,28 @@ public class TestContext {
     private static String currentFormTitle;
     private static String formsPackage;
 
+    /**
+     * Initialize test context. Reading from property file required data.
+     * Must be executed before test start.
+     */
     public static void init() {
         formsPackage = Props.getInstance().get("swingback.forms.package");
     }
 
     public static Form getCurrentForm() {
-//         TODO: 24.01.2017
         return currentForm;
     }
 
 
-    public static Form getForm(String title) throws FormInitializationException {
-
-        return getForm(formsPackage, title);
+    /**
+     * Initialize form with specified title and save its instance to {@link TestContext#currentForm} for further use
+     *
+     * @param title form title
+     * @return page instance
+     * @throws FormInitializationException if failed to execute corresponding page constructor
+     */
+    public static Form setForm(String title) throws FormInitializationException {
+        return setForm(formsPackage, title);
     }
 
     // Возвращает класс формы в пакете с именем
@@ -37,13 +46,13 @@ public class TestContext {
     }
 
     // Устанавливает форму по пакету и тайтлу
-    public static Form getForm(String packageName, String title) throws FormInitializationException {
+    public static Form setForm(String packageName, String title) throws FormInitializationException {
         return bootstrapForm(getFormClass(packageName, title));
     }
 
 
     // Устанавливает форму по классу
-    public static Form getForm(Class<? extends Form> formClass) throws FormInitializationException {
+    public static Form setForm(Class<? extends Form> formClass) throws FormInitializationException {
         return bootstrapForm(formClass);
     }
 
