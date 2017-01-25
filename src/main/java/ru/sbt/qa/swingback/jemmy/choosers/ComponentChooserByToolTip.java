@@ -8,7 +8,6 @@ import java.awt.*;
 /**
  * Component chooser by tool type.
  *
- * @author Olga Germanova
  */
 public class ComponentChooserByToolTip implements ComponentChooser {
     private String toolTip = "";

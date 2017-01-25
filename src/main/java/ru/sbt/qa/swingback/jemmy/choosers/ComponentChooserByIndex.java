@@ -6,7 +6,6 @@ import java.awt.*;
 
 /**
  * Component chooser by index.
- * @author Varivoda Ivan.
  */
 public class ComponentChooserByIndex implements ComponentChooser {
 	

@@ -16,8 +16,6 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * @author sbt-varivoda-ia
- * @date 16.01.2017
  */
 public class AppManager {
 

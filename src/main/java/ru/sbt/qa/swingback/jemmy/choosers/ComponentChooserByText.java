@@ -8,7 +8,6 @@ import java.awt.*;
 /**
  * Component chooser by text.
  *
- * @author Anastasia Oblomova
  */
 public class ComponentChooserByText implements ComponentChooser {
     private String text = "";

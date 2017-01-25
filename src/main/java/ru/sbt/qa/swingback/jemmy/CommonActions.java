@@ -19,8 +19,6 @@ import static org.netbeans.jemmy.operators.Operator.*;
 
 /**
  * Common action for interaction with jemmy components.
- * @author Varivoda Ivan
- * @date 26.12.2016
  */
 public class CommonActions {
     
@@ -35,7 +33,6 @@ public class CommonActions {
     
     /**
      * Push the button if it is enabled.
-     * @author Olga Germanova
      */
     public static void pushButtonIfIsEnabled(JButtonOperator buttonOperator) {
         if (buttonOperator.isEnabled()) {
@@ -49,7 +46,6 @@ public class CommonActions {
      * Return text component value.
      * @param chooser   TextComponent's chooser in which search will be performed.
      * @param container Container with essential component.
-     * @author Varivoda Ivan
      */
     public static String getTextComponentValue(ContainerOperator container, ComponentChooser chooser) {
         return new JTextComponentOperator(container, chooser).getText();
@@ -60,7 +56,6 @@ public class CommonActions {
     /**
      * Click on the table column title.
      * @throws IllegalArgumentException If index isn't founded.
-     * @author Varivoda Ivan
      */
     public static void clickOnTableColumnTitle(JTableOperator table, String colName) {
         JTableHeaderOperator headerOperator = table.getHeaderOperator();
@@ -76,7 +71,6 @@ public class CommonActions {
      * Search row with the specified parameters by equals.
      * @param valMap column name/cell value.
      * @return Index of the first essential row. -1 if isn't founded.
-     * @author Anastasia Oblomova, Varivoda Ivan
      */
     public static int findIndexFirstTableRowWithParams(JTableOperator table, Map<String, String> valMap) {
         Map<String, StringComparator> compMap = valMap.entrySet()
@@ -91,7 +85,6 @@ public class CommonActions {
      * @param valMap column name/cell value
      * @param compMap column name/String comparator for comparing cell value
      * @return Index of the first essential row. -1 if isn't founded.
-     * @author Anastasia Oblomova, Varivoda Ivan
      */
     public static int findIndexFirstTableRowWithParams(JTableOperator table, Map<String, String> valMap, Map<String, StringComparator> compMap) {
         
@@ -145,7 +138,6 @@ public class CommonActions {
      * Find column index in the table. Using equals.
      * @param columnName The name of the desired column.
      * @return Index of the column name. The index starts from 0.
-     * @author sbt-varivoda-ia
      */
     public static int findColumnIndex(JTableOperator table, String columnName) {
         int res = table.findColumn(columnName, String::equals);
@@ -163,7 +155,6 @@ public class CommonActions {
     
     /**
      * Select first table element.
-     * @author Varivoda Ivan
      */
     public static void selectFistTableElem(JTableOperator tableOperator) {
         tableOperator.selectCell(0, 0);
@@ -171,7 +162,6 @@ public class CommonActions {
     
     /**
      * Return all the table's data as list of rows.
-     * @author Varivoda Ivan
      * @see #getListMapsFromTable(JTableOperator)
      */
     public static List<Map<String, String>> getListMapsFromTable(JTableOperator table) {
@@ -180,7 +170,6 @@ public class CommonActions {
     
     /**
      * Return the table's rows from specified range.
-     * @author Varivoda Ivan
      * @see #getListMapsFromTable(JTableOperator)
      */
     public static List<Map<String, String>> getTableRowsFromRange(JTableOperator table, int startIndex, int lastIndex) {
@@ -194,7 +183,6 @@ public class CommonActions {
     /**
      * Return from table's row with specified index a map (Key - sting column name. Value - sting row value)
      * with the correct order. If the table is empty - the map will be empty.
-     * @author Varivoda Ivan
      */
     public static Map<String, String> getMapFromTableByRowIndex(JTableOperator tableOperator, int rowIndex) {
         Map<String, String> resMap = new LinkedHashMap<>();
@@ -209,7 +197,6 @@ public class CommonActions {
     
     /**
      * Return map with row's values from selected row.
-     * @author Varivoda Ivan
      */
     public static Map<String, String> getMapFromSelectRow(JTableOperator table) {
         return getMapFromTableByRowIndex(table, table.getSelectedRow());
@@ -222,7 +209,6 @@ public class CommonActions {
      * Select to the specified tree node by path.
      * @param tree  The tree with essential node.
      * @param paths The path to node.
-     * @author Zhanna Chernolutskaya
      */
     public static void chooseTreeNode(JTreeOperator tree, String[] paths) {
         TreePath node = tree.findPath(paths[0].trim());
@@ -250,7 +236,6 @@ public class CommonActions {
      * @param container The container containing the label.
      * @param chooser   Label chooser.
      * @return Label text.
-     * @author Varivoda Ivan
      */
     public static String getLabelText(ContainerOperator container, ComponentChooser chooser) {
         return new JLabelOperator(container, chooser).getText();
@@ -296,7 +281,6 @@ public class CommonActions {
     /**
      * Return list string values of the combo box, if combo box is empty - return empty list.
      * @return list string values of the combo box.
-     * @author Varivoda Ivan
      */
     public static List<String> getComboBoxItems(JComboBoxOperator comboBoxOperator) {
         int itemCount = comboBoxOperator.getItemCount();
@@ -331,7 +315,6 @@ public class CommonActions {
      * @param container Container with essential component.
      * @param type      Component type.
      * @return true - if element is presence, otherwise - false.
-     * @author Varivoda Ivan
      */
     public static boolean isComponentPresence(ContainerOperator container, Form.ComponentType type,
                                               ComponentChooser chooser) {
@@ -367,7 +350,6 @@ public class CommonActions {
      * @param container Container with essential component.
      * @param type      Component type.
      * @return true - if element is editable, otherwise - false.
-     * @author Varivoda Ivan
      */
     public static boolean isComponentEditable(ContainerOperator container, Form.ComponentType type,
                                               ComponentChooser chooser) {

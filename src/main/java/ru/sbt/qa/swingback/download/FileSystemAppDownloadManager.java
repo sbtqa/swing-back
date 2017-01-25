@@ -13,7 +13,6 @@ import java.util.stream.Stream;
 
 /**
  * Manager for downloading the application jars to required folder and preparation of the necessary data.
- * Created by Varivoda Ivan on 21.01.2017.
  */
 public class FileSystemAppDownloadManager extends AppDownloadManager {
 

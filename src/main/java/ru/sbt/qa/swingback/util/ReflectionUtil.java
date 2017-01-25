@@ -10,9 +10,6 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * Created by sbt-varivoda-ia on 20.01.2017.
- */
 public class ReflectionUtil {
 
     public static final Logger log = LoggerFactory.getLogger(ReflectionUtil.class);

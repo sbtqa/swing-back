@@ -13,7 +13,6 @@ import java.util.regex.Pattern;
 
 /**
  * JNLP download manager.
- * Created by Varivoda Ivan on 22.01.2017.
  */
 public class JnlpAppDownloadManager extends AppDownloadManager {
 

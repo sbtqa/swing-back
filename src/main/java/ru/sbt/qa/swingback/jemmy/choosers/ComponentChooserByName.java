@@ -7,7 +7,6 @@ import java.awt.*;
 /**
  * Component chooser by name.
  *
- * @author Olga Germanova
  */
 public class ComponentChooserByName implements ComponentChooser {
     private String name = "";

@@ -3,8 +3,6 @@ package ru.sbt.qa.swingback.annotations;
 import java.lang.annotation.*;
 
 /**
- * Аналог ActionTitle в BDD. Вешается на методы из форм банка.
- * @author Varivoda Ivan.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

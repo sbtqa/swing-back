@@ -10,7 +10,6 @@ import java.net.URL;
 /**
  * Manage file downloads
  *
- * @author sbt-sidochenko-vv
  */
 public class DownloadManager {
 

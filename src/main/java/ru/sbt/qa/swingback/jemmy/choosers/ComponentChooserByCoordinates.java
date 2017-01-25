@@ -6,7 +6,6 @@ import java.awt.*;
 
 /**
  * Component chooser by coordinates.
- * @author Varivoda Ivan.
  */
 public class ComponentChooserByCoordinates implements ComponentChooser {
 	

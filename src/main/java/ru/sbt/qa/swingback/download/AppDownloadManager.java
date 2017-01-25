@@ -9,9 +9,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Map;
 
-/**
- * Created by Varivoda Ivan on 22.01.2017.
- */
 public abstract class AppDownloadManager {
 
     public static final String PROP_NAME_APP_JARS_PATH_ABS = "swingback.app.jars.path.abs";
@@ -23,7 +20,6 @@ public abstract class AppDownloadManager {
      * Return a folder path where will be stored the application jars.
      *
      * @throws FileNotFoundException If folder is not founded.
-     * @author Varivoda Ivan
      */
     public static String getJarsFolder() throws FileNotFoundException {
         //check abs path from properties
