@@ -3,10 +3,7 @@ package ru.sbt.qa.swingback;
 import org.apache.commons.lang.reflect.FieldUtils;
 import org.apache.commons.lang.reflect.MethodUtils;
 import org.netbeans.jemmy.ComponentChooser;
-import org.netbeans.jemmy.operators.ComponentOperator;
-import org.netbeans.jemmy.operators.ContainerOperator;
-import org.netbeans.jemmy.operators.JButtonOperator;
-import org.netbeans.jemmy.operators.JTabbedPaneOperator;
+import org.netbeans.jemmy.operators.*;
 import ru.sbt.qa.swingback.annotations.ActionTitle;
 import ru.sbt.qa.swingback.annotations.ActionTitles;
 import ru.sbt.qa.swingback.annotations.ComponentInfo;
@@ -28,7 +25,7 @@ public abstract class Form {
 
     private String title;
     protected ContainerOperator currentCont;
-    protected ContainerOperator currentTabbedPane;
+    protected JTabbedPaneOperator currentTabbedPane;
     private List<Field> formFields;
     private List<Method> formMethods;
 //    private Field currentContainer;
@@ -73,6 +70,13 @@ public abstract class Form {
     public void pushButton(String title) throws NoSuchFieldException {
         ComponentChooser ch = getComponentChooser(title);
         CommonActions.pushButtonIfIsEnabled(new JButtonOperator(getCurrentContainerOperator(), ch));
+    }
+
+    @ActionTitle("Выбирает первую запись в таблице")
+    public void m2(String title) throws NoSuchFieldException {
+
+        ComponentChooser ch = getComponentChooser(title);
+        CommonActions.selectFistTableElem(new JTableOperator(getCurrentContainerOperator(), ch));
     }
 
 
@@ -205,25 +209,18 @@ public abstract class Form {
      *
      * @param title title of the required pane
      */
-    public void selectTabPane(String title) {
-        List<Field> tabbedPanes = getFormTabbedPanes();
-
-        JTabbedPaneOperator tpo;
-        for (Field tpf : tabbedPanes) {
-            try {
-                tpf.setAccessible(true);
-                tpo = (JTabbedPaneOperator) FieldUtils.readField(tpf, this);
-            } catch (IllegalAccessException e) {
-                throw new SwingBackRuntimeException("Failed to get tabbed pane from the current form.", e);
-            }
-            if (tpo != null && tpo.findPage(title) != -1) {
-//                currentContainer = tpf;
-                currentTabbedPane = tpo;
-                tpo.selectPage(title);
-                isCurrentTabbedPane = true;
-                return;
-            }
+    public void selectTabPane(String title, String page) throws NoSuchFieldException {
+        System.err.println("Inside select " + title + " " + page);
+        ComponentChooser tpChooser = getComponentChooser(title);
+        System.err.println("Inside select " + tpChooser);
+        currentTabbedPane = new JTabbedPaneOperator(currentCont, tpChooser);
+        System.err.println("currentTabbedPane.findPage(page) " + currentTabbedPane.findPage(page));
+        if (currentTabbedPane.findPage(page) != -1) {
+            currentTabbedPane.selectPage(page);
+            isCurrentTabbedPane = true;
+            return;
         }
+        throw new NoSuchFieldException("There is no tabbed pane with title '" + title + "' on '" + this.getTitle() + "' form object");
     }
 
     /**

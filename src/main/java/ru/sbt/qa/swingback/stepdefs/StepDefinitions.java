@@ -14,7 +14,7 @@ public class StepDefinitions {
 
     @И("(?:пользователь |он |)открывает приложение$")
     @And("^user open the application$")
-    public void startApp() throws InterruptedException {
+    public void startApp() {
         AppManager.getInstance().startApplication();
         AppManager.getInstance().execute( () -> {
             TestContext.init();
@@ -24,7 +24,7 @@ public class StepDefinitions {
 
     @И("(?:пользователь |он |)закрывает приложение$")
     @And("^user close the application$")
-    public void closeApp() throws InterruptedException {
+    public void closeApp() {
         AppManager.getInstance().stopApplication();
     }
 
@@ -37,8 +37,18 @@ public class StepDefinitions {
         });
     }
 
-    @И("^wait (.*?)$")
-    public void vait(String title) throws FormInitializationException, InterruptedException {
+    @И("^(?:пользователь |он |)переходит на вкладку \"(.*?)\" в окне с вкалдками \"(.*?)\"$")
+    @And("^user select the tab \"(.*?)\" on the tabbed pane \"(.*?)\"$")
+    public void selectTabe(String pane, String title) throws FormInitializationException {
+        AppManager.getInstance().execute( () -> {
+            TestContext.getCurrentForm().selectTabPane(title, pane);
+            return null;
+        });
+    }
+
+    @И("^ожидание (.*?) сек$")
+    @And("^wait (.*?) sec$")
+    public void wait(String title) throws FormInitializationException, InterruptedException {
         SECONDS.sleep(Long.parseLong(title));
     }
 
