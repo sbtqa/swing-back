@@ -10,8 +10,7 @@ import java.lang.annotation.Target;
 public @interface ActionTitles {
 
     /**
-     *
-     * @return TODO
+     * Titles text
      */
     ActionTitle[] value();
 }

@@ -9,15 +9,19 @@ import java.lang.annotation.Target;
 
 
 /**
- * Аннотация предназначена для хранения информации о компоненте формы.
- * Например, тип поля и его имя.
- * @author Varivoda Ivan.
+ * Contains swing component information.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface ComponentInfo {
-    
+
+    /**
+     * Component title
+     */
     String title();
-    
+
+    /**
+     * Component type
+     */
     Form.ComponentType type();
 }

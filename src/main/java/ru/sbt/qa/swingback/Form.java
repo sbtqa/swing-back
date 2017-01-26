@@ -255,28 +255,6 @@ public abstract class Form {
     }
 
     /**
-     * Initialization form components by execution the initialize method {@link Initializer}
-     *
-     * @param title initializer title
-     * @throws NoSuchMethodException if initializer is not founded
-     */
-    public void initializeComponent(String title) throws NoSuchMethodException {
-        List<Method> methods = getFormMethods();
-        for (Method method : methods) {
-            if (Core.isRequiredInitializer(method, title)) {
-                try {
-                    method.setAccessible(true);
-                    MethodUtils.invokeMethod(this, method.getName(), null);
-                    return;
-                } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                    throw new SwingBackRuntimeException("Failed to invoke initializer with title '" + title + "'", e);
-                }
-            }
-        }
-        throw new NoSuchMethodException("There is no '" + this.title + "' initializer on '" + this.getTitle() + "' form object");
-    }
-
-    /**
      * Helper methods for manipulations on fields and objects
      */
     private static class Core {
@@ -299,22 +277,6 @@ public abstract class Form {
                 actionList.add(actionTitle);
             }
             return actionList.stream().filter(action -> action.value().equals(title)).findFirst().isPresent();
-        }
-
-        /**
-         * Check whether given method has {@link Initializer} annotation with required title
-         *
-         * @param method method to check
-         * @param title  required title
-         * @return true|false
-         */
-        private static Boolean isRequiredInitializer(Method method, String title) {
-            Initializer initializer = method.getAnnotation(Initializer.class);
-            List<Initializer> initializersList = new ArrayList<>();
-            if (initializer != null) {
-                initializersList.add(initializer);
-            }
-            return initializersList.stream().filter(action -> action.title().equals(title)).findFirst().isPresent();
         }
 
         /**
