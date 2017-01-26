@@ -108,33 +108,6 @@ public abstract class Form {
 
 //    ----------------------------------------------------
 
-    public List<Method> getFormMethods() {
-//        if (formMethods == null) {
-//            formMethods = Core.getDeclaredMethods(this.getClass());
-//        }
-        return formMethods;
-    }
-
-    public List<Field> getFormFields() {
-//        if (formFields == null) {
-//            formFields = Core.getDeclaredFields(this.getClass());
-//        }
-        return formFields;
-    }
-
-    public List<Field> getFormTabbedPanes() {
-//        if (formTabbedPanes == null) {
-//            formTabbedPanes = new LinkedList<>();
-//            List<Field> fields = Core.getDeclaredFields(this.getClass());
-//            for (Field field : fields) {
-//                if (Core.isRequiredField(field, ComponentType.TABBED_PANE)) {
-//                    formTabbedPanes.add(field);
-//                }
-//            }
-//        }
-        return formTabbedPanes;
-    }
-
     /**
      * Find method with corresponding title on current from, and execute it
      *
@@ -143,8 +116,7 @@ public abstract class Form {
      * @throws java.lang.NoSuchMethodException if required method couldn't be found
      */
     public Object executeMethodByTitle(String title, Object... param) throws NoSuchMethodException {
-        List<Method> methods = getFormMethods();
-        for (Method method : methods) {
+        for (Method method : formMethods) {
             if (Core.isRequiredAction(method, title)) {
                 try {
                     method.setAccessible(true);
@@ -165,8 +137,7 @@ public abstract class Form {
      * @throws NoSuchFieldException if required field couldn't be found
      */
     public ComponentChooser getComponentChooser(String title) throws NoSuchFieldException {
-        List<Field> fields = getFormFields();
-        for (Field field : fields) {
+        for (Field field : formFields) {
             if (Core.isRequiredField(field, title)) {
                 try {
                     field.setAccessible(true);
@@ -187,8 +158,7 @@ public abstract class Form {
      * @throws NoSuchFieldException if required field couldn't be found
      */
     public ComponentType getComponentType(String title) throws NoSuchFieldException {
-        List<Field> fields = getFormFields();
-        for (Field field : fields) {
+        for (Field field : formFields) {
             if (Core.isRequiredField(field, title)) {
                 field.setAccessible(true);
                 return field.getAnnotation(ComponentInfo.class).type();
@@ -206,8 +176,7 @@ public abstract class Form {
      * @throws NoSuchFieldException if required field couldn't be found
      */
     public ComponentOperator getComponentOperator(ComponentType type, String title) throws NoSuchFieldException {
-        List<Field> fields = getFormFields();
-        for (Field field : fields) {
+        for (Field field : formFields) {
             if (Core.isRequiredField(field, title) & Core.isRequiredField(field, type)) {
                 try {
                     field.setAccessible(true);

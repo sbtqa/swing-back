@@ -12,7 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * JNLP download manager.
+ * Manager support download app jars to the siwng-back via jnlp.
  */
 public class JnlpAppDownloadManager extends AppDownloadManager {
 
@@ -40,8 +40,6 @@ public class JnlpAppDownloadManager extends AppDownloadManager {
 
     /**
      * Downloading application jars to the specified folder by the type.
-     *
-     * @autor Varivoda Ivan
      */
     public void downloadAppJars(String jarsFolderPath) throws IOException {
         String jnlpHref = props.get(PROP_NAME_JNLP_HREF);

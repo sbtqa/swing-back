@@ -16,7 +16,6 @@ import java.util.stream.Stream;
  */
 public class FileSystemAppDownloadManager extends AppDownloadManager {
 
-
     public static final String JVM_PROP_PREFIX = "swingback.jvm.prop.";
     public static final String PROP_NAME_START_CLASS = "swingback.app.startclass";
 

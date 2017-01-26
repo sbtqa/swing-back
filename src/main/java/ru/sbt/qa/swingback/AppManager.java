@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
+ * Singleton for managing the test application
  */
 public class AppManager {
 

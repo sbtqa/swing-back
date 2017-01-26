@@ -12,6 +12,9 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class StepDefinitions {
 
+    /**
+     * Start the application.
+     */
     @And("^user open the application$")
     @И("(?:пользователь |он |)открывает приложение$")
     public void startApp() {
@@ -22,6 +25,9 @@ public class StepDefinitions {
         });
     }
 
+    /**
+     * Closing of application
+     */
     @And("^user close the application$")
     @И("(?:пользователь |он |)закрывает приложение$")
     public void closeApp() {
@@ -37,6 +43,11 @@ public class StepDefinitions {
         });
     }
 
+    /**
+     * Switch current context from the container (Frame, Dialog) to page of the tabbed pane with specified title and pane.
+     * @param pane pane name
+     * @param title tabbed pane title
+     */
     @And("^user select the tab \"(.*?)\" on the tabbed pane \"(.*?)\"$")
     @И("^(?:пользователь |он |)переходит на вкладку \"(.*?)\" в окне с вкалдками \"(.*?)\"$")
     public void selectTabe(String pane, String title) throws FormInitializationException {
@@ -46,19 +57,28 @@ public class StepDefinitions {
         });
     }
 
+    /**
+     * Switch context back to the container
+     */
     @And("^user working with form$")
     @И("^(?:пользователь |он |) работает с формой$")
-    public void workingWithForm() throws FormInitializationException {
+    public void workingWithForm() {
         AppManager.getInstance().execute( () -> {
             TestContext.getCurrentForm().switchToContainer();
             return null;
         });
     }
 
+    /**
+     * waining in seconds for a specified time
+     * @param wait
+     * @throws FormInitializationException
+     * @throws InterruptedException
+     */
     @And("^wait (.*?) sec$")
     @И("^ожидание (.*?) сек$")
-    public void wait(String title) throws FormInitializationException, InterruptedException {
-        SECONDS.sleep(Long.parseLong(title));
+    public void wait(String wait) throws InterruptedException {
+        SECONDS.sleep(Long.parseLong(wait));
     }
 
     /**

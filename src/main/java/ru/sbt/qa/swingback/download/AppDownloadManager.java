@@ -46,10 +46,19 @@ public abstract class AppDownloadManager {
         throw new FileNotFoundException();
     }
 
+    /**
+     * @return the start class name of the application which will be started
+     */
     public abstract String getStartClassName();
 
+    /**
+     * @return system properties which will be set in the jvm context
+     */
     public abstract Map<String, String> getSystemProperties();
 
+    /**
+     * @return URLs of the application jars
+     */
     public abstract URL[] getJarsURL();
 
     public abstract boolean configIsValid();
