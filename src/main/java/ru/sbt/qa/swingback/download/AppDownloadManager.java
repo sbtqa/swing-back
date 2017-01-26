@@ -9,6 +9,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Map;
 
+/**
+ * Basic methods for downloading application and obtaining necessary information about it.
+ */
 public abstract class AppDownloadManager {
 
     public static final String PROP_NAME_APP_JARS_PATH_ABS = "swingback.app.jars.path.abs";
