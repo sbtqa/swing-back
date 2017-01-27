@@ -2,9 +2,13 @@ package ru.sbt.qa.swingback;
 
 import org.apache.commons.lang.reflect.FieldUtils;
 import org.apache.commons.lang.reflect.MethodUtils;
+import org.junit.Assert;
 import org.netbeans.jemmy.ComponentChooser;
 import org.netbeans.jemmy.operators.*;
-import ru.sbt.qa.swingback.annotations.*;
+import ru.sbt.qa.swingback.annotations.ActionTitle;
+import ru.sbt.qa.swingback.annotations.ActionTitles;
+import ru.sbt.qa.swingback.annotations.Component;
+import ru.sbt.qa.swingback.annotations.FormEntry;
 import ru.sbt.qa.swingback.jemmy.CommonActions;
 
 import java.lang.reflect.Field;
@@ -14,6 +18,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+
+import static org.hamcrest.CoreMatchers.is;
 
 /**
  * Base form object class. Contains basic actions with elements, search methods
@@ -106,6 +112,12 @@ public abstract class Form {
         CommonActions.chooseComboBoxItem(new JComboBoxOperator(getCurrentContainerOperator(), getComponentChooser(title)), value, String::equals);
     }
 
+    @ActionTitle("")
+    @ActionTitle("table is empty")
+    public void tableIsEmpty(String title) throws NoSuchFieldException {
+        Assert.assertThat(new JTableOperator(getCurrentContainerOperator(), getComponentChooser(title)).getRowCount(), is(0));
+    }
+
 //    ----------------------------------------------------
 
     /**
@@ -161,7 +173,7 @@ public abstract class Form {
         for (Field field : formFields) {
             if (Core.isRequiredField(field, title)) {
                 field.setAccessible(true);
-                return field.getAnnotation(ComponentInfo.class).type();
+                return field.getAnnotation(Component.class).type();
             }
         }
         throw new NoSuchFieldException("There is no '" + title + "' field on '" + this.getTitle() + "' form object");
@@ -249,35 +261,35 @@ public abstract class Form {
         }
 
         /**
-         * Check whether given field has {@link ComponentInfo} annotation with required title
+         * Check whether given field has {@link Component} annotation with required title
          *
          * @param field field to check
          * @param title required title
          * @return true|false
          */
         private static boolean isRequiredField(Field field, String title) {
-            ComponentInfo componentInfo = field.getAnnotation(ComponentInfo.class);
-            List<ComponentInfo> componentInfoListList = new ArrayList<>();
-            if (componentInfo != null) {
-                componentInfoListList.add(componentInfo);
+            Component component = field.getAnnotation(Component.class);
+            List<Component> componentListList = new ArrayList<>();
+            if (component != null) {
+                componentListList.add(component);
             }
-            return componentInfoListList.stream().filter(comInf -> comInf.title().equals(title)).findFirst().isPresent();
+            return componentListList.stream().filter(comInf -> comInf.title().equals(title)).findFirst().isPresent();
         }
 
         /**
-         * Check whether given field has {@link ComponentInfo} annotation with required type
+         * Check whether given field has {@link Component} annotation with required type
          *
          * @param field field to check
          * @param type  required type
          * @return true|false
          */
         private static boolean isRequiredField(Field field, ComponentType type) {
-            ComponentInfo componentInfo = field.getAnnotation(ComponentInfo.class);
-            List<ComponentInfo> componentInfoListList = new ArrayList<>();
-            if (componentInfo != null) {
-                componentInfoListList.add(componentInfo);
+            Component component = field.getAnnotation(Component.class);
+            List<Component> componentListList = new ArrayList<>();
+            if (component != null) {
+                componentListList.add(component);
             }
-            return componentInfoListList.stream().filter(comInf -> comInf.type().equals(type)).findFirst().isPresent();
+            return componentListList.stream().filter(comInf -> comInf.type().equals(type)).findFirst().isPresent();
         }
 
         /**

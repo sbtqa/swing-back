@@ -17,7 +17,7 @@ public class StepDefinitions {
      */
     @And("^user open the application$")
     @И("(?:пользователь |он |)открывает приложение$")
-    public void startApp() {
+    public void startApp() throws NoSuchMethodException {
         AppManager.getInstance().startApplication();
         AppManager.getInstance().execute( () -> {
             TestContext.init();
@@ -89,8 +89,8 @@ public class StepDefinitions {
      * @throws FormInitializationException if current page is not initialized
      * @throws NoSuchMethodException if corresponding method doesn't exist
      */
-    @And("^user \\((.*?)\\)$")
-    @И("^(?:пользователь |он |)\\((.*?)\\)$")
+    @And("^(?:user |)\\((.*?)\\)$")
+    @И("^(?:пользователь |он)\\((.*?)\\)$")
     public void userActionNoParams(String action) throws FormInitializationException, NoSuchMethodException {
         AppManager.getInstance().execute(new Callable<Void>() {
             @Override
@@ -110,8 +110,8 @@ public class StepDefinitions {
      * @throws FormInitializationException if current page is not initialized
      * @throws NoSuchMethodException if corresponding method doesn't exist
      */
-    @And("^user \\((.*?)\\) (?:with param |)\"([^\"]*)\"$")
-    @И("^(?:пользователь |он |)\\((.*?)\\) (?:с параметром |)\"([^\"]*)\"$")
+    @And("^(?:user |)\\((.*?)\\) (?:with param |)\"([^\"]*)\"$")
+    @И("^(?:пользователь |он)\\((.*?)\\) (?:с параметром |)\"([^\"]*)\"$")
     public void userActionOneParam(String action, String param) throws FormInitializationException, NoSuchMethodException {
         AppManager.getInstance().execute(() -> {
                 TestContext.getCurrentForm().executeMethodByTitle(action, param);
