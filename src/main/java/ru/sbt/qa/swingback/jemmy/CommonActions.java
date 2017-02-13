@@ -267,12 +267,12 @@ public class CommonActions {
      * @param comboBox   Jemmy operator of combo box.
      * @param itemName   Selected item name.
      * @param comparator Comparator for searching an essential item.
-     * @throws NoSuchElementException when essential item is't founded.
+     * @throws SwingBackRuntimeException when essential item is't founded.
      */
     public static void chooseComboBoxItem(JComboBoxOperator comboBox, String itemName, StringComparator comparator) {
         int itemIndex = comboBox.findItemIndex(itemName, comparator);
         if (itemIndex == -1) {
-            throw new NoSuchElementException("Item with name \"" + itemName + "\" is not founded in combo box.");
+            throw new SwingBackRuntimeException("Item with name \"" + itemName + "\" is not founded in combo box.");
         }
         comboBox.setSelectedIndex(itemIndex);
         comboBox.pushKey(KeyEvent.VK_ENTER);

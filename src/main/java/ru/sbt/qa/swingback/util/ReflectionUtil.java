@@ -35,7 +35,6 @@ public class ReflectionUtil {
 
         FormEntry formEntry;
         for (Class<?> form : allClasses) {
-            System.out.println("Now look up " + form);
             formEntry = form.getAnnotation(FormEntry.class);
             if (formEntry != null && formEntry.title().equals(title)) {
                 return form;

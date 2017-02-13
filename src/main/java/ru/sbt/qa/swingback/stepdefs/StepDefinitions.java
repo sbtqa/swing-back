@@ -1,12 +1,13 @@
 package ru.sbt.qa.swingback.stepdefs;
 
 import cucumber.api.DataTable;
+import cucumber.api.java.After;
 import cucumber.api.java.en.And;
 import cucumber.api.java.ru.И;
 import ru.sbt.qa.swingback.AppManager;
 import ru.sbt.qa.swingback.Callable;
 import ru.sbt.qa.swingback.TestContext;
-import ru.sbt.qa.swingback.jemmy.FormInitializationException;
+import ru.sbt.qa.swingback.exceptions.FormInitializationException;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
@@ -202,6 +203,11 @@ public class StepDefinitions {
                 return null;
             }
         });
+    }
+
+    @After
+    public void closeAppl() {
+        AppManager.getInstance().stopApplication();
     }
 
 }

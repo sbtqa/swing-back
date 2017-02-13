@@ -1,6 +1,6 @@
 package ru.sbt.qa.swingback;
 
-import ru.sbt.qa.swingback.jemmy.FormInitializationException;
+import ru.sbt.qa.swingback.exceptions.FormInitializationException;
 import ru.sbt.qa.swingback.util.ReflectionUtil;
 import ru.sbtqa.tag.qautils.properties.Props;
 
