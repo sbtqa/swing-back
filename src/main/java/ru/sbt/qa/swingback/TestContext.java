@@ -47,7 +47,11 @@ public class TestContext {
 
     // Устанавливает форму по пакету и тайтлу
     public static Form setForm(String packageName, String title) throws FormInitializationException {
-        return bootstrapForm(getFormClass(packageName, title));
+        Class<?> formClass = getFormClass(packageName, title);
+        if (formClass != null) {
+            return bootstrapForm(formClass);
+        }
+        throw new FormInitializationException("The form with the title '" + title + "' is not founded in the packacge '" + packageName + "'");
     }
 
 
@@ -56,7 +60,10 @@ public class TestContext {
         return bootstrapForm(formClass);
     }
 
-    //create and set form by class
+    /**
+     * create and set form by class
+     * @throws FormInitializationException
+     */
     private static Form bootstrapForm(Class<?> form) throws FormInitializationException {
         if (form != null) {
             try {

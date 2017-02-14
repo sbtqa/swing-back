@@ -83,7 +83,7 @@ public abstract class Form {
         CommonActions.selectFistTableElem(new JTableOperator(getCurrentContainerOperator(), ch));
     }
 
-    @ActionTitle("")
+    @ActionTitle("разворачивает дерево")
     @ActionTitle("expand tree")
     public void m3(String title, String path) throws NoSuchFieldException {
         ComponentChooser ch = getComponentChooser(title);
@@ -91,28 +91,35 @@ public abstract class Form {
         CommonActions.chooseTreeNode(new JTreeOperator(getCurrentContainerOperator(), ch), paths);
     }
 
-    @ActionTitle("")
+    @ActionTitle("заполняет поле")
     @ActionTitle("fill field")
     public void fiilField(String title, String value) throws NoSuchFieldException {
         ComponentChooser ch = getComponentChooser(title);
         new JTextComponentOperator(getCurrentContainerOperator(), ch).setText(value);
     }
 
-    @ActionTitle("")
-    @ActionTitle("set check box")
-    public void setCheckBox(String title, String value) throws NoSuchFieldException {
+    @ActionTitle("устанавливает чекбокс")
+    @ActionTitle("set checkbox")
+    public void setCheckBox(String title) throws NoSuchFieldException {
         ComponentChooser ch = getComponentChooser(title);
-        CommonActions.setCheckBox(getCurrentContainerOperator(), ch, Boolean.valueOf(value));
+        CommonActions.setCheckBox(getCurrentContainerOperator(), ch, true);
     }
 
-    @ActionTitle("")
+    @ActionTitle("снимает чекбокс")
+    @ActionTitle("unset checkbox")
+    public void unSetCheckBox(String title) throws NoSuchFieldException {
+        ComponentChooser ch = getComponentChooser(title);
+        CommonActions.setCheckBox(getCurrentContainerOperator(), ch, false);
+    }
+
+    @ActionTitle("выбирает элемент из выпадающего списка")
     @ActionTitle("choose combo box item")
     public void chooseComboBoxItem(String title, String value) throws NoSuchFieldException {
         ComponentChooser ch = getComponentChooser(title);
         CommonActions.chooseComboBoxItem(new JComboBoxOperator(getCurrentContainerOperator(), getComponentChooser(title)), value, String::equals);
     }
 
-    @ActionTitle("")
+    @ActionTitle("проверяет, что таблица пуста")
     @ActionTitle("table is empty")
     public void tableIsEmpty(String title) throws NoSuchFieldException {
         Assert.assertThat(new JTableOperator(getCurrentContainerOperator(), getComponentChooser(title)).getRowCount(), is(0));
@@ -335,5 +342,3 @@ public abstract class Form {
     }
 
 }
-
-

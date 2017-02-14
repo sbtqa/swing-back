@@ -3,6 +3,7 @@ package ru.sbt.qa.swingback.aspects;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
+import org.netbeans.jemmy.TimeoutExpiredException;
 
 @Aspect
 /**
@@ -17,7 +18,7 @@ public class ExceptionAspect {
         Class<? extends Throwable> curThwClass;
         for (int i = 0; i < throwables.length; i++) {
             curThwClass = throwables[i].getClass();
-            if (curThwClass.equals(AssertionError.class) || curThwClass.equals(NoSuchFieldException.class)) {
+            if (curThwClass.equals(AssertionError.class) || curThwClass.equals(NoSuchFieldException.class) || curThwClass.equals(NoSuchMethodException.class) || curThwClass.equals(TimeoutExpiredException.class)) {
                 throw throwables[i];
             }
         }
