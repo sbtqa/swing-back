@@ -37,7 +37,7 @@ public class StepDefinitions {
 
     @And("^opening form \"(.*?)\"$")
     @И("^открывается форма \"(.*?)\"$")
-    public void m(String title) throws FormInitializationException {
+    public void openForm(String title) throws FormInitializationException {
         AppManager.getInstance().execute( () -> {
             TestContext.setForm(title);
             return null;

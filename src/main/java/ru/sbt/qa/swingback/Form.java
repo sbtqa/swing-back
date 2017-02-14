@@ -20,6 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.*;
 
 /**
  * Base form object class. Contains basic actions with elements, search methods
@@ -76,6 +77,25 @@ public abstract class Form {
         new JButtonOperator(getCurrentContainerOperator(), ch).push();
     }
 
+    @ActionTitle("проверяет, что таблица пуста")
+    @ActionTitle("table is empty")
+    public void tableIsEmpty(String title) throws NoSuchFieldException {
+        assertThat("The table with title '" + title + "' is not empty.",
+                new JTableOperator(getCurrentContainerOperator(), getComponentChooser(title)).getRowCount(), is(0));
+    }
+
+    @ActionTitle("нажимает на заголовок столбца")
+    @ActionTitle("click on table column title")
+    public void clickOnTableColumnTitle(String title, String columnTitle) throws NoSuchFieldException {
+        CommonActions.clickOnTableColumnTitle(new JTableOperator(getCurrentContainerOperator(), getComponentChooser(title)), columnTitle);
+    }
+
+    @ActionTitle("выделяет первую запись таблицы")
+    @ActionTitle("select the first table row")
+    public void selectFistTableElem(String title) throws NoSuchFieldException {
+        CommonActions.selectFistTableElem(new JTableOperator(getCurrentContainerOperator(), getComponentChooser(title)));
+    }
+
     @ActionTitle("выбирает первую запись в таблице")
     @ActionTitle("select first table row")
     public void m2(String title) throws NoSuchFieldException {
@@ -98,6 +118,7 @@ public abstract class Form {
         new JTextComponentOperator(getCurrentContainerOperator(), ch).setText(value);
     }
 
+
     @ActionTitle("устанавливает чекбокс")
     @ActionTitle("set checkbox")
     public void setCheckBox(String title) throws NoSuchFieldException {
@@ -112,17 +133,39 @@ public abstract class Form {
         CommonActions.setCheckBox(getCurrentContainerOperator(), ch, false);
     }
 
+    @ActionTitle("проверяет, что чекбокс выставлен")
+    @ActionTitle("check that checkbox is selected")
+    public void checkSelectedCheckBox(String title) throws NoSuchFieldException {
+        assertThat("The checkbox with title '" + title + "' is not selected.",
+                CommonActions.isSelectedCheckBox(getCurrentContainerOperator(), getComponentChooser(title)), is(true));
+    }
+
+    @ActionTitle("проверяет, что чекбокс невыставлен")
+    @ActionTitle("check that checkbox is not selected")
+    public void checkUnSelectedCheckBox(String title) throws NoSuchFieldException {
+        assertThat("The checkbox with title '" + title + "' is selected.",
+                CommonActions.isSelectedCheckBox(getCurrentContainerOperator(), getComponentChooser(title)), is(false));
+    }
+
     @ActionTitle("выбирает элемент из выпадающего списка")
-    @ActionTitle("choose combo box item")
+    @ActionTitle("choose combobox item")
     public void chooseComboBoxItem(String title, String value) throws NoSuchFieldException {
         ComponentChooser ch = getComponentChooser(title);
         CommonActions.chooseComboBoxItem(new JComboBoxOperator(getCurrentContainerOperator(), getComponentChooser(title)), value, String::equals);
     }
 
-    @ActionTitle("проверяет, что таблица пуста")
-    @ActionTitle("table is empty")
-    public void tableIsEmpty(String title) throws NoSuchFieldException {
-        Assert.assertThat(new JTableOperator(getCurrentContainerOperator(), getComponentChooser(title)).getRowCount(), is(0));
+    @ActionTitle("проверяет наличие элемента на форме")
+    @ActionTitle("check component presence")
+    public void checkComponentPresence(String title) throws NoSuchFieldException {
+        assertThat("The component with title '" + title + "' is not presence on form ' " + getTitle() + "'.",
+                CommonActions.isComponentPresence(getCurrentContainerOperator(), getComponentType(title), getComponentChooser(title)), is(true));
+    }
+
+    @ActionTitle("проверяет редактируемость элемента")
+    @ActionTitle("check component editable")
+    public void checkComponentEditable(String title) throws NoSuchFieldException {
+        assertThat("The component with title '" + title + "' is not editable.",
+                CommonActions.isComponentEditable(getCurrentContainerOperator(), getComponentType(title), getComponentChooser(title)), is(true));
     }
 
 //    ----------------------------------------------------

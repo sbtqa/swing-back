@@ -100,5 +100,4 @@ public class AppManager {
     public <T> T execute(Callable<T> task) {
         return allNodes.exec(task);
     }
-
 }
