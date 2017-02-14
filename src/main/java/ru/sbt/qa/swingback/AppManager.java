@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * Singleton for managing the test application
+ * Singleton for managing the test application.
  */
 public class AppManager {
 
@@ -41,14 +41,29 @@ public class AppManager {
         return instance;
     }
 
+    /**
+     * Method run the application which is in filesystem
+     */
     public void startApplication() {
         startApplication(new FileSystemAppDownloadManager());
     }
 
+    /**
+     * run the testing application with required download strategy
+     *
+     * @param downloadManager strategy
+     */
     public void startApplication(AppDownloadManager downloadManager) {
         startApplication(downloadManager.getJarsURL(), downloadManager.getStartClassName(), downloadManager.getSystemProperties());
     }
 
+    /**
+     * Run application
+     *
+     * @param appJars        URLs to the required testing application jars
+     * @param startClassName full start class name
+     * @param sysProps       required system environment properties for testing application
+     */
     public void startApplication(final URL[] appJars, final String startClassName, final Map<String, String> sysProps) {
         execute(() -> {
             // Setting jvm params
@@ -67,11 +82,21 @@ public class AppManager {
         });
     }
 
+    /**
+     * stop application
+     */
     public void stopApplication() {
         allNodes.kill();
         cloud.shutdown();
     }
 
+    /**
+     * Redirect the task to the second jvm which contains testing application and jemmy
+     *
+     * @param task required task
+     * @param <T>  returned value type
+     * @return task result
+     */
     public <T> T execute(Callable<T> task) {
         return allNodes.exec(task);
     }
