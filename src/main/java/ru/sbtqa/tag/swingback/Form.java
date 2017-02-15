@@ -76,7 +76,7 @@ public abstract class Form {
     }
 
     @ActionTitle("проверяет, что таблица пуста")
-    @ActionTitle("table is empty")
+    @ActionTitle("check table is empty")
     public void tableIsEmpty(String title) throws NoSuchFieldException {
         assertThat("The table with title '" + title + "' is not empty.",
                 new JTableOperator(getCurrentContainerOperator(), getComponentChooser(title)).getRowCount(), is(0));
@@ -148,14 +148,14 @@ public abstract class Form {
     @ActionTitle("проверяет наличие элемента на форме")
     @ActionTitle("check component presence")
     public void checkComponentPresence(String title, String value) throws NoSuchFieldException {
-        assertThat("The component with title '" + title + "' is not presence on form ' " + getTitle() + "'.",
+        assertThat("The component with title '" + title + "' is " +(Boolean.valueOf(value) ? "not " : "") +"presence on form ' " + getTitle() + "'.",
                 CommonActions.isComponentPresence(getCurrentContainerOperator(), getComponentType(title), getComponentChooser(title)), is(Boolean.valueOf(value)));
     }
 
     @ActionTitle("проверяет редактируемость элемента")
     @ActionTitle("check component editable")
     public void checkComponentEditable(String title, String value) throws NoSuchFieldException {
-        assertThat("The component with title '" + title + "' is not editable.",
+        assertThat("The component with title '" + title + "' is " +(Boolean.valueOf(value) ? "not " : "") + "editable.",
                 CommonActions.isComponentEditable(getCurrentContainerOperator(), getComponentType(title), getComponentChooser(title)), is(Boolean.valueOf(value)));
     }
 
