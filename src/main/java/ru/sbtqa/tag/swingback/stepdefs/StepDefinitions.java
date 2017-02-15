@@ -1,7 +1,6 @@
 package ru.sbtqa.tag.swingback.stepdefs;
 
 import cucumber.api.DataTable;
-import cucumber.api.java.After;
 import cucumber.api.java.en.And;
 import cucumber.api.java.ru.И;
 import ru.sbtqa.tag.swingback.AppManager;
@@ -21,7 +20,7 @@ public class StepDefinitions {
     @И("(?:пользователь |он |)открывает приложение$")
     public void startApp() throws NoSuchMethodException {
         AppManager.getInstance().startApplication();
-        AppManager.getInstance().getAllNodes().exec(new Callable<Object>() {
+        AppManager.getInstance().execute(new Callable<Object>() {
             @Override
             public Object call() throws Exception {
                 TestContext.init();
@@ -43,7 +42,7 @@ public class StepDefinitions {
     @And("^opening form \"(.*?)\"$")
     @И("^открывается форма \"(.*?)\"$")
     public void openForm(String title) throws FormInitializationException {
-        AppManager.getInstance().getAllNodes().exec(new Callable<Object>() {
+        AppManager.getInstance().execute(new Callable<Object>() {
             @Override
             public Object call() throws Exception {
                 TestContext.setForm(title);
@@ -60,7 +59,7 @@ public class StepDefinitions {
     @And("^user select the tab \"(.*?)\" on the tabbed pane \"(.*?)\"$")
     @И("^(?:пользователь |он |)переходит на вкладку \"(.*?)\" в окне с вкалдками \"(.*?)\"$")
     public void selectTabe(String pane, String title) throws FormInitializationException {
-        AppManager.getInstance().getAllNodes().exec(new Callable<Object>() {
+        AppManager.getInstance().execute(new Callable<Object>() {
             @Override
             public Object call() throws Exception {
                 TestContext.getCurrentForm().selectTabPane(title, pane);
@@ -73,9 +72,9 @@ public class StepDefinitions {
      * Switch context back to the container
      */
     @And("^user working with form$")
-    @И("^(?:пользователь |он |) работает с формой$")
+    @И("^(?:пользователь |он |)работает с формой$")
     public void workingWithForm() {
-        AppManager.getInstance().getAllNodes().exec(new Callable<Object>() {
+        AppManager.getInstance().execute(new Callable<Object>() {
             @Override
             public Object call() throws Exception {
                 TestContext.getCurrentForm().switchToContainer();
@@ -107,7 +106,7 @@ public class StepDefinitions {
     @And("^(?:user |)\\((.*?)\\)$")
     @И("^(?:пользователь |он)\\((.*?)\\)$")
     public void userActionNoParams(String action) throws FormInitializationException, NoSuchMethodException {
-        AppManager.getInstance().getAllNodes().exec(new Callable<Void>() {
+        AppManager.getInstance().execute(new Callable<Void>() {
             @Override
             public Void call() throws Exception {
                 TestContext.getCurrentForm().executeMethodByTitle(action);
@@ -128,7 +127,7 @@ public class StepDefinitions {
     @And("^(?:user |)\\((.*?)\\) (?:with param |)\"([^\"]*)\"$")
     @И("^(?:пользователь |он)\\((.*?)\\) (?:с параметром |)\"([^\"]*)\"$")
     public void userActionOneParam(String action, String param) throws FormInitializationException, NoSuchMethodException {
-        AppManager.getInstance().getAllNodes().exec(new Callable<Object>() {
+        AppManager.getInstance().execute(new Callable<Object>() {
             @Override
             public Object call() throws Exception {
                 TestContext.getCurrentForm().executeMethodByTitle(action, param);
@@ -150,7 +149,7 @@ public class StepDefinitions {
     @And("^user \\((.*?)\\) (?:with the parameters |)\"([^\"]*)\" \"([^\"]*)\"$")
     @И("^(?:пользователь |он |)\\((.*?)\\) (?:с параметрарми |)\"([^\"]*)\" \"([^\"]*)\"$")
     public void userActionTwoParams(String action, String param1, String param2) throws FormInitializationException, NoSuchMethodException {
-        AppManager.getInstance().getAllNodes().exec(new Callable<Void>() {
+        AppManager.getInstance().execute(new Callable<Void>() {
             @Override
             public Void call() throws Exception {
                 TestContext.getCurrentForm().executeMethodByTitle(action, param1, param2);
@@ -173,7 +172,7 @@ public class StepDefinitions {
     @And("^user \\((.*?)\\) (?:with the parameters |)\"([^\"]*)\" \"([^\"]*)\" \"([^\"]*)\"$")
     @И("^(?:пользователь |он |)\\((.*?)\\) (?:с параметрарми |)\"([^\"]*)\" \"([^\"]*)\" \"([^\"]*)\"$")
     public void userActionThreeParams(String action, String param1, String param2, String param3) throws FormInitializationException, NoSuchMethodException {
-        AppManager.getInstance().getAllNodes().exec(new Callable<Void>() {
+        AppManager.getInstance().execute(new Callable<Void>() {
             @Override
             public Void call() throws Exception {
                 TestContext.getCurrentForm().executeMethodByTitle(action, param1, param2, param3);
@@ -194,7 +193,7 @@ public class StepDefinitions {
     @And("^user \\((.*?)\\) data$")
     @И("^(?:пользователь |он |)\\((.*?)\\) данными$")
     public void userActionTableParam(String action, DataTable dataTable) throws FormInitializationException, NoSuchMethodException {
-        AppManager.getInstance().getAllNodes().exec(new Callable<Void>() {
+        AppManager.getInstance().execute(new Callable<Void>() {
             @Override
             public Void call() throws Exception {
                 TestContext.getCurrentForm().executeMethodByTitle(action, dataTable);
@@ -216,18 +215,13 @@ public class StepDefinitions {
     @And("^user \\((.*?)\\) [^\"]*\"([^\"]*) data$")
     @И("^(?:пользователь |он |)\\((.*?)\\) [^\"]*\"([^\"]*)\" данными$")
     public void userDoActionWithObject(String action, String param, DataTable dataTable) throws FormInitializationException, NoSuchMethodException {
-        AppManager.getInstance().getAllNodes().exec(new Callable<Void>() {
+        AppManager.getInstance().execute(new Callable<Void>() {
             @Override
             public Void call() throws Exception {
                 TestContext.getCurrentForm().executeMethodByTitle(action, param, dataTable);
                 return null;
             }
         });
-    }
-
-    @After
-    public void closeAppl() {
-        AppManager.getInstance().stopApplication();
     }
 
 }

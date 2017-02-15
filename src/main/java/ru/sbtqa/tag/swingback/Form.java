@@ -96,14 +96,14 @@ public abstract class Form {
 
     @ActionTitle("выбирает первую запись в таблице")
     @ActionTitle("select first table row")
-    public void m2(String title) throws NoSuchFieldException {
+    public void selectFirstTableRow(String title) throws NoSuchFieldException {
         ComponentChooser ch = getComponentChooser(title);
         CommonActions.selectFistTableElem(new JTableOperator(getCurrentContainerOperator(), ch));
     }
 
     @ActionTitle("разворачивает дерево")
     @ActionTitle("expand tree")
-    public void m3(String title, String path) throws NoSuchFieldException {
+    public void expandTree(String title, String path) throws NoSuchFieldException {
         ComponentChooser ch = getComponentChooser(title);
         String[] paths = path.split("->");
         CommonActions.chooseTreeNode(new JTreeOperator(getCurrentContainerOperator(), ch), paths);

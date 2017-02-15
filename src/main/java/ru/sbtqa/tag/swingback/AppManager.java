@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import ru.sbtqa.tag.swingback.download.AppDownloadManager;
 import ru.sbtqa.tag.swingback.download.FileSystemAppDownloadManager;
 
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Map;
@@ -27,10 +28,6 @@ public class AppManager {
 
     private final Cloud cloud;
     private final ViNode allNodes;
-
-    public ViNode getAllNodes() {
-        return allNodes;
-    }
 
     private AppManager() {
         cloud = CloudFactory.createCloud();
@@ -70,7 +67,7 @@ public class AppManager {
      * @param sysProps       required system environment properties for testing application
      */
     public void startApplication(final URL[] appJars, final String startClassName, final Map<String, String> sysProps) {
-        allNodes.exec(new Callable<Object>() {
+        execute(new Callable<Object>() {
             @Override
             public Object call() throws Exception {
                 // Setting jvm params
@@ -80,11 +77,16 @@ public class AppManager {
                 // loading application by urls
                 URLClassLoader loader = new URLClassLoader(appJars, System.class.getClassLoader());
                 // run application
-                Class<?> mainClass = loader.loadClass(startClassName);
-                Object app = mainClass.newInstance();
-                Thread.currentThread().setContextClassLoader(loader);
-                LOG.info("Start loading main class.");
-                new ClassReference(app).startApplication();
+                Class<?> mainClass = null;
+                try {
+                    mainClass = loader.loadClass(startClassName);
+                    Object app = mainClass.newInstance();
+                    Thread.currentThread().setContextClassLoader(loader);
+                    LOG.info("Start loading main class.");
+                    new ClassReference(app).startApplication();
+                } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | InvocationTargetException | IllegalAccessException e) {
+                    throw new AppManagerException("An error occurred while starting application.", e);
+                }
                 return null;
             }
         });
@@ -96,6 +98,15 @@ public class AppManager {
     public void stopApplication() {
         allNodes.kill();
         cloud.shutdown();
+    }
+
+    public <T> T execute(Callable<T> task) {
+        return allNodes.exec(new Callable<T>() {
+            @Override
+            public T call() throws Exception {
+                return task.call();
+            }
+        });
     }
 
 }
