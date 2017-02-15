@@ -4,6 +4,7 @@ import org.gridkit.nanocloud.Cloud;
 import org.gridkit.nanocloud.CloudFactory;
 import org.gridkit.nanocloud.VX;
 import org.gridkit.vicluster.ViNode;
+import org.gridkit.vicluster.VoidCallable;
 import org.netbeans.jemmy.ClassReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -99,5 +100,23 @@ public class AppManager {
      */
     public <T> T execute(Callable<T> task) {
         return allNodes.exec(task);
+    }
+
+    /**
+     * Redirect the task to the second jvm which contains testing application and jemmy
+     *
+     * @param task required task
+     */
+    public void execute(Runnable task) {
+        allNodes.exec(task);
+    }
+
+    /**
+     * Redirect the task to the second jvm which contains testing application and jemmy
+     *
+     * @param task required task
+     */
+    public void execute(VoidCallable task) {
+        allNodes.exec(task);
     }
 }

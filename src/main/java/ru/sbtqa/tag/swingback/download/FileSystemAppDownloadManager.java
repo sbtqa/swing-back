@@ -64,8 +64,4 @@ public class FileSystemAppDownloadManager extends AppDownloadManager {
                 .toArray(URL[]::new);
     }
 
-    @Override
-    public boolean configIsValid() {
-        return true;
-    }
 }

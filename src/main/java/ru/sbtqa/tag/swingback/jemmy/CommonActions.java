@@ -249,7 +249,6 @@ public class CommonActions {
      * Set check box value.
      */
     public static void setCheckBox(ContainerOperator container, ComponentChooser chooser, boolean value) {
-//        new JCheckBoxOperator(container, chooser).setSelected(value);
         new JCheckBoxOperator(container, chooser).changeSelection(value);
     }
     

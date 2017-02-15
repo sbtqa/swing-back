@@ -61,6 +61,4 @@ public abstract class AppDownloadManager {
      */
     public abstract URL[] getJarsURL();
 
-    public abstract boolean configIsValid();
-
 }

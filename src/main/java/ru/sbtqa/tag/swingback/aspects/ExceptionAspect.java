@@ -7,12 +7,12 @@ import org.netbeans.jemmy.TimeoutExpiredException;
 
 @Aspect
 /**
- * Aspect for translation an Exceptions to {@link AssertionError} and {@link NoSuchFieldException} errors <br/>
+ * Aspect for translation an Exceptions to {@link AssertionError}, {@link NoSuchFieldException}, {@link NoSuchMethodException}, {@link TimeoutExpiredException} errors <br/>
  */
 public class ExceptionAspect {
 
 
-    @AfterThrowing(pointcut = "execution(* *(..))", throwing = "throwable")
+    @AfterThrowing(pointcut = "execution(* ru.sbtqa.tag.swingback.AppManager.execute(..))", throwing = "throwable")
     public void translateException(Throwable throwable) throws Throwable {
         Throwable[] throwables = ExceptionUtils.getThrowables(throwable);
         Class<? extends Throwable> curThwClass;

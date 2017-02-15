@@ -12,7 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Manager support download app jars to the siwng-back via jnlp.
+ * Manager support download app jars to the swing-back via jnlp.
  */
 public class JnlpAppDownloadManager extends AppDownloadManager {
 
@@ -31,11 +31,6 @@ public class JnlpAppDownloadManager extends AppDownloadManager {
     @Override
     public URL[] getJarsURL() {
         return new URL[0];
-    }
-
-    @Override
-    public boolean configIsValid() {
-        return false;
     }
 
     /**

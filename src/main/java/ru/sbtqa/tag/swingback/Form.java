@@ -119,16 +119,9 @@ public abstract class Form {
 
     @ActionTitle("устанавливает чекбокс")
     @ActionTitle("set checkbox")
-    public void setCheckBox(String title) throws NoSuchFieldException {
+    public void setCheckBox(String title, String value) throws NoSuchFieldException {
         ComponentChooser ch = getComponentChooser(title);
-        CommonActions.setCheckBox(getCurrentContainerOperator(), ch, true);
-    }
-
-    @ActionTitle("снимает чекбокс")
-    @ActionTitle("unset checkbox")
-    public void unSetCheckBox(String title) throws NoSuchFieldException {
-        ComponentChooser ch = getComponentChooser(title);
-        CommonActions.setCheckBox(getCurrentContainerOperator(), ch, false);
+        CommonActions.setCheckBox(getCurrentContainerOperator(), ch, Boolean.valueOf(value));
     }
 
     @ActionTitle("проверяет, что чекбокс выставлен")
@@ -154,16 +147,16 @@ public abstract class Form {
 
     @ActionTitle("проверяет наличие элемента на форме")
     @ActionTitle("check component presence")
-    public void checkComponentPresence(String title) throws NoSuchFieldException {
+    public void checkComponentPresence(String title, String value) throws NoSuchFieldException {
         assertThat("The component with title '" + title + "' is not presence on form ' " + getTitle() + "'.",
-                CommonActions.isComponentPresence(getCurrentContainerOperator(), getComponentType(title), getComponentChooser(title)), is(true));
+                CommonActions.isComponentPresence(getCurrentContainerOperator(), getComponentType(title), getComponentChooser(title)), is(Boolean.valueOf(value)));
     }
 
     @ActionTitle("проверяет редактируемость элемента")
     @ActionTitle("check component editable")
-    public void checkComponentEditable(String title) throws NoSuchFieldException {
+    public void checkComponentEditable(String title, String value) throws NoSuchFieldException {
         assertThat("The component with title '" + title + "' is not editable.",
-                CommonActions.isComponentEditable(getCurrentContainerOperator(), getComponentType(title), getComponentChooser(title)), is(true));
+                CommonActions.isComponentEditable(getCurrentContainerOperator(), getComponentType(title), getComponentChooser(title)), is(Boolean.valueOf(value)));
     }
 
 //    ----------------------------------------------------

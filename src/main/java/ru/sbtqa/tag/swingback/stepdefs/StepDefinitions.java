@@ -4,6 +4,7 @@ import cucumber.api.DataTable;
 import cucumber.api.java.After;
 import cucumber.api.java.en.And;
 import cucumber.api.java.ru.И;
+import org.gridkit.vicluster.VoidCallable;
 import ru.sbtqa.tag.swingback.AppManager;
 import ru.sbtqa.tag.swingback.Callable;
 import ru.sbtqa.tag.swingback.TestContext;
@@ -133,9 +134,11 @@ public class StepDefinitions {
     @And("^user \\((.*?)\\) (?:with the parameters |)\"([^\"]*)\" \"([^\"]*)\"$")
     @И("^(?:пользователь |он |)\\((.*?)\\) (?:с параметрарми |)\"([^\"]*)\" \"([^\"]*)\"$")
     public void userActionTwoParams(String action, String param1, String param2) throws FormInitializationException, NoSuchMethodException {
-        AppManager.getInstance().execute( ()  -> {
+        AppManager.getInstance().execute(new VoidCallable() {
+            @Override
+            public void call() throws Exception {
                 TestContext.getCurrentForm().executeMethodByTitle(action, param1, param2);
-                return null;
+            }
         });
     }
 
