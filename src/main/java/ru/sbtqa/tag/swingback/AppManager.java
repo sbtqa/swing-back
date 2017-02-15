@@ -4,7 +4,6 @@ import org.gridkit.nanocloud.Cloud;
 import org.gridkit.nanocloud.CloudFactory;
 import org.gridkit.nanocloud.VX;
 import org.gridkit.vicluster.ViNode;
-import org.gridkit.vicluster.VoidCallable;
 import org.netbeans.jemmy.ClassReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +14,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.Callable;
 
 /**
  * Singleton for managing the test application.
@@ -27,6 +27,10 @@ public class AppManager {
 
     private final Cloud cloud;
     private final ViNode allNodes;
+
+    public ViNode getAllNodes() {
+        return allNodes;
+    }
 
     private AppManager() {
         cloud = CloudFactory.createCloud();
@@ -66,20 +70,23 @@ public class AppManager {
      * @param sysProps       required system environment properties for testing application
      */
     public void startApplication(final URL[] appJars, final String startClassName, final Map<String, String> sysProps) {
-        execute(() -> {
-            // Setting jvm params
-            Properties properties = System.getProperties();
-            properties.putAll(sysProps);
-            System.setProperties(properties);
-            // loading application by urls
-            URLClassLoader loader = new URLClassLoader(appJars, System.class.getClassLoader());
-            // run application
-            Class<?> mainClass = loader.loadClass(startClassName);
-            Object app = mainClass.newInstance();
-            Thread.currentThread().setContextClassLoader(loader);
-            LOG.info("Start loading main class.");
-            new ClassReference(app).startApplication();
-            return null;
+        allNodes.exec(new Callable<Object>() {
+            @Override
+            public Object call() throws Exception {
+                // Setting jvm params
+                Properties properties = System.getProperties();
+                properties.putAll(sysProps);
+                System.setProperties(properties);
+                // loading application by urls
+                URLClassLoader loader = new URLClassLoader(appJars, System.class.getClassLoader());
+                // run application
+                Class<?> mainClass = loader.loadClass(startClassName);
+                Object app = mainClass.newInstance();
+                Thread.currentThread().setContextClassLoader(loader);
+                LOG.info("Start loading main class.");
+                new ClassReference(app).startApplication();
+                return null;
+            }
         });
     }
 
@@ -91,32 +98,4 @@ public class AppManager {
         cloud.shutdown();
     }
 
-    /**
-     * Redirect the task to the second jvm which contains testing application and jemmy
-     *
-     * @param task required task
-     * @param <T>  returned value type
-     * @return task result
-     */
-    public <T> T execute(Callable<T> task) {
-        return allNodes.exec(task);
-    }
-
-    /**
-     * Redirect the task to the second jvm which contains testing application and jemmy
-     *
-     * @param task required task
-     */
-    public void execute(Runnable task) {
-        allNodes.exec(task);
-    }
-
-    /**
-     * Redirect the task to the second jvm which contains testing application and jemmy
-     *
-     * @param task required task
-     */
-    public void execute(VoidCallable task) {
-        allNodes.exec(task);
-    }
 }
