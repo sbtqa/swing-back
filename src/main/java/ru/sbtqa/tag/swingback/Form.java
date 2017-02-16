@@ -111,7 +111,7 @@ public abstract class Form {
 
     @ActionTitle("заполняет поле")
     @ActionTitle("fill field")
-    public void fiilField(String title, String value) throws NoSuchFieldException {
+    public void fillField(String title, String value) throws NoSuchFieldException {
         ComponentChooser ch = getComponentChooser(title);
         new JTextComponentOperator(getCurrentContainerOperator(), ch).setText(value);
     }
@@ -141,7 +141,6 @@ public abstract class Form {
     @ActionTitle("выбирает элемент из выпадающего списка")
     @ActionTitle("choose combobox item")
     public void chooseComboBoxItem(String title, String value) throws NoSuchFieldException {
-        ComponentChooser ch = getComponentChooser(title);
         CommonActions.chooseComboBoxItem(new JComboBoxOperator(getCurrentContainerOperator(), getComponentChooser(title)), value, String::equals);
     }
 

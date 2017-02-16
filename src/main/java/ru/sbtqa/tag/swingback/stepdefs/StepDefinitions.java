@@ -164,7 +164,7 @@ public class StepDefinitions {
      *
      * @param action title of the action to execute
      * @param param1 first parameter
-     * @param param2 second patrameter
+     * @param param2 second parameter
      * @param param3 third parameter
      * @throws FormInitializationException if current page is not initialized
      * @throws NoSuchMethodException if corresponding method doesn't exist

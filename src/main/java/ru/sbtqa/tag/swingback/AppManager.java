@@ -77,7 +77,7 @@ public class AppManager {
                 // loading application by urls
                 URLClassLoader loader = new URLClassLoader(appJars, System.class.getClassLoader());
                 // run application
-                Class<?> mainClass = null;
+                Class<?> mainClass;
                 try {
                     mainClass = loader.loadClass(startClassName);
                     Object app = mainClass.newInstance();
