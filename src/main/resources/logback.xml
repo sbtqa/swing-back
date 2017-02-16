@@ -19,11 +19,6 @@
 		</encoder>
 	</appender>
 
-	<!--<logger name="ru.sbt.qa.sbbolweb.utils" level="debug"-->
-		<!--additivity="false">-->
-		<!--<appender-ref ref="STDERR"/>-->
-	<!--</logger>-->
-
 	<root level="debug">
 		<appender-ref ref="STDOUT" />
 	</root>

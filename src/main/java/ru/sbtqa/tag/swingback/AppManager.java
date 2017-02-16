@@ -104,6 +104,7 @@ public class AppManager {
         return allNodes.exec(new Callable<T>() {
             @Override
             public T call() throws Exception {
+                // gridkit require anonymous class for serialization
                 return task.call();
             }
         });

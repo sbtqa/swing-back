@@ -1,14 +1,14 @@
 package ru.sbtqa.tag.swingback;
 
+import ru.sbtqa.tag.qautils.properties.Props;
 import ru.sbtqa.tag.swingback.exceptions.FormInitializationException;
 import ru.sbtqa.tag.swingback.util.ReflectionUtil;
-import ru.sbtqa.tag.qautils.properties.Props;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * Static helper containing test content (current form, title)
+ * Helper containing test content (current form, title)
  */
 public class TestContext {
 
@@ -40,12 +40,16 @@ public class TestContext {
         return setForm(formsPackage, title);
     }
 
-    // Возвращает класс формы в пакете с именем
+    /**
+     * Return form class
+     */
     private static Class<?> getFormClass(String packageName, String title) {
         return ReflectionUtil.getClassByFormEntryTitle(packageName, title);
     }
 
-    // Устанавливает форму по пакету и тайтлу
+    /**
+     * Set form with specified title and package to current context
+     */
     public static Form setForm(String packageName, String title) throws FormInitializationException {
         Class<?> formClass = getFormClass(packageName, title);
         if (formClass != null) {
@@ -55,13 +59,16 @@ public class TestContext {
     }
 
 
-    // Устанавливает форму по классу
+    /**
+     * Set specified form to current context by formClass
+     */
     public static Form setForm(Class<? extends Form> formClass) throws FormInitializationException {
         return bootstrapForm(formClass);
     }
 
     /**
      * create and set form by class
+     *
      * @throws FormInitializationException
      */
     private static Form bootstrapForm(Class<?> form) throws FormInitializationException {
