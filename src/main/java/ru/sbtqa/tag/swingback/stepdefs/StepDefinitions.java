@@ -86,7 +86,6 @@ public class StepDefinitions {
     /**
      * waining in seconds for a specified time
      * @param wait
-     * @throws FormInitializationException
      * @throws InterruptedException
      */
     @And("^wait (.*?) sec$")
