@@ -20,14 +20,6 @@ public class StepDefinitions {
     @И("(?:пользователь |он |)открывает приложение$")
     public void startApp() throws NoSuchMethodException {
         AppManager.getInstance().startApplication();
-        AppManager.getInstance().execute(new Callable<Object>() {
-            @Override
-            public Object call() throws Exception {
-                TestContext.init();
-                return null;
-            }
-        });
-
     }
 
     /**

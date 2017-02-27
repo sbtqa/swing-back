@@ -14,7 +14,7 @@ public class TestContext {
 
     private static Form currentForm;
     private static String currentFormTitle;
-    private static String formsPackage;
+    private static String formsPackage = Props.getInstance().get("swingback.forms.package");
 
     /**
      * Initialize test context. Reading from property file required data.
