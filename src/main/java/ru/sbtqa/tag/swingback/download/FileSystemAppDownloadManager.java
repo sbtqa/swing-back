@@ -1,6 +1,5 @@
 package ru.sbtqa.tag.swingback.download;
 
-import ru.sbtqa.tag.swingback.AppManagerException;
 import ru.sbtqa.tag.qautils.properties.Props;
 
 import java.io.File;
@@ -43,7 +42,7 @@ public class FileSystemAppDownloadManager extends AppDownloadManager {
         try {
             jarsFolder = new File(getJarsFolder());
         } catch (FileNotFoundException e) {
-            throw new ApplicationDownloadException("Specified folder isn't exist. Check the properties file.");
+            throw new ApplicationDownloadException("Specified folder isn't exist. Check the properties file.", e);
         }
 
         if ( jarsFolder.listFiles() != null && jarsFolder.listFiles().length == 0) {
@@ -57,11 +56,20 @@ public class FileSystemAppDownloadManager extends AppDownloadManager {
                     try {
                         u = uri.toURL();
                     } catch (MalformedURLException ex) {
-                        throw new AppManagerException("An Exception occurred while trying the string uri to URL.", ex);
+                        throw new ApplicationDownloadException("An Exception occurred while trying the string uri to URL.", ex);
                     }
                     return u;
                 })
                 .toArray(URL[]::new);
+    }
+
+    @Override
+    public URL getResourcesURL() {
+        try {
+            return new File(getResourcesFolder()).toURI().toURL();
+        } catch (FileNotFoundException | MalformedURLException e) {
+            return null;
+        }
     }
 
 }

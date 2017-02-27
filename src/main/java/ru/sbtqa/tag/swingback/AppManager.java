@@ -13,6 +13,7 @@ import ru.sbtqa.tag.swingback.download.FileSystemAppDownloadManager;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Callable;
@@ -56,17 +57,27 @@ public class AppManager {
      * @param downloadManager strategy
      */
     public void startApplication(AppDownloadManager downloadManager) {
-        startApplication(downloadManager.getJarsURL(), downloadManager.getStartClassName(), downloadManager.getSystemProperties());
+        URL[] jarsURL = downloadManager.getJarsURL();
+        URL resourcesURL = downloadManager.getResourcesURL();
+        URL[] appJarsAndResourcesURL;
+        if (resourcesURL != null) {
+            appJarsAndResourcesURL = Arrays.copyOf(jarsURL, jarsURL.length + 1);
+            appJarsAndResourcesURL[appJarsAndResourcesURL.length] = resourcesURL;
+        } else {
+            appJarsAndResourcesURL = jarsURL;
+        }
+
+        startApplication(appJarsAndResourcesURL, downloadManager.getStartClassName(), downloadManager.getSystemProperties());
     }
 
     /**
      * Run application
      *
-     * @param appJars        URLs to the required testing application jars
+     * @param appJarsAndResources        URLs to the required testing application jars
      * @param startClassName full start class name
      * @param sysProps       required system environment properties for testing application
      */
-    public void startApplication(final URL[] appJars, final String startClassName, final Map<String, String> sysProps) {
+    public void startApplication(final URL[] appJarsAndResources, final String startClassName, final Map<String, String> sysProps) {
         execute(new Callable<Object>() {
             @Override
             public Object call() throws Exception {
@@ -75,7 +86,7 @@ public class AppManager {
                 properties.putAll(sysProps);
                 System.setProperties(properties);
                 // loading application by urls
-                URLClassLoader loader = new URLClassLoader(appJars, System.class.getClassLoader());
+                URLClassLoader loader = new URLClassLoader(appJarsAndResources, System.class.getClassLoader());
                 // run application
                 Class<?> mainClass;
                 try {
