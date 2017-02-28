@@ -62,7 +62,7 @@ public class AppManager {
         URL[] appJarsAndResourcesURL;
         if (resourcesURL != null) {
             appJarsAndResourcesURL = Arrays.copyOf(jarsURL, jarsURL.length + 1);
-            appJarsAndResourcesURL[appJarsAndResourcesURL.length] = resourcesURL;
+            appJarsAndResourcesURL[appJarsAndResourcesURL.length - 1] = resourcesURL;
         } else {
             appJarsAndResourcesURL = jarsURL;
         }
