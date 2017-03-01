@@ -23,14 +23,14 @@ import java.util.concurrent.Callable;
  */
 public class AppManager {
 
-    private final static Logger LOG = LoggerFactory.getLogger(AppManager.class);
-
     private static AppManager instance;
 
+    private final Logger log;
     private final Cloud cloud;
     private final ViNode allNodes;
 
     private AppManager() {
+        log = LoggerFactory.getLogger(AppManager.class);
         cloud = CloudFactory.createCloud();
         cloud.node("**").x(VX.TYPE).setLocal();
         cloud.node("node1");
@@ -73,9 +73,9 @@ public class AppManager {
     /**
      * Run application
      *
-     * @param appJarsAndResources        URLs to the required testing application jars
-     * @param startClassName full start class name
-     * @param sysProps       required system environment properties for testing application
+     * @param appJarsAndResources URLs to the required testing application jars
+     * @param startClassName      full start class name
+     * @param sysProps            required system environment properties for testing application
      */
     public void startApplication(final URL[] appJarsAndResources, final String startClassName, final Map<String, String> sysProps) {
         execute(new Callable<Object>() {
@@ -93,7 +93,6 @@ public class AppManager {
                     mainClass = loader.loadClass(startClassName);
                     Object app = mainClass.newInstance();
                     Thread.currentThread().setContextClassLoader(loader);
-                    LOG.info("Start loading main class.");
                     new ClassReference(app).startApplication();
                 } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | InvocationTargetException | IllegalAccessException e) {
                     throw new AppManagerException("An error occurred while starting application.", e);

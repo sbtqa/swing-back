@@ -8,7 +8,6 @@ import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import ru.sbtqa.tag.swingback.download.AppDownloadManager;
 import ru.sbtqa.tag.swingback.download.FileSystemAppDownloadManager;
 import ru.sbtqa.tag.qautils.properties.Props;
 
@@ -92,40 +91,40 @@ public class FileSystemAppDownloadManagerTest {
     public void getDefaultAppJarsFolderIfPropertyFileHasNotSpecifiedCustomFolder() throws IOException {
         PowerMockito.when(Props.get(FileSystemAppDownloadManager.PROP_NAME_APP_JARS_PATH_ABS)).thenReturn("");
         Files.createDirectories(Paths.get(defaultJarsFolder));
-        Assert.assertEquals(new File(defaultJarsFolder).getAbsolutePath(), AppDownloadManager.getJarsFolder());
+        Assert.assertEquals(new File(defaultJarsFolder).getAbsolutePath(), fileSystemAppDownloadManager.getJarsFolder());
     }
 
     @Test
     public void getAbsoluteAppJarsPathFolderWhenPropertyFileContainsCorrectAbsPath() throws IOException, InterruptedException {
         PowerMockito.when(Props.get(FileSystemAppDownloadManager.PROP_NAME_APP_JARS_PATH_ABS)).thenReturn(abstJarsFolder);
         createDirIfNotExist(abstJarsFolder);
-        assertEquals(abstJarsFolder, AppDownloadManager.getJarsFolder());
+        assertEquals(abstJarsFolder, fileSystemAppDownloadManager.getJarsFolder());
     }
 
     @Test(expected = FileNotFoundException.class)
     public void throwFileNotFoundedExcWhenAbsDirPathIsNotExist() throws IOException {
         PowerMockito.when(Props.get(FileSystemAppDownloadManager.PROP_NAME_APP_JARS_PATH_ABS)).thenReturn(abstJarsFolder);
-        FileSystemAppDownloadManager.getJarsFolder();
+        fileSystemAppDownloadManager.getJarsFolder();
     }
 
     @Test(expected = FileNotFoundException.class)
     public void throwFileNotFoundedExceptionIfDefaultFolderIsNotExist() throws IOException {
         PowerMockito.when(Props.get(FileSystemAppDownloadManager.PROP_NAME_APP_JARS_PATH_ABS)).thenReturn("");
-        FileSystemAppDownloadManager.getJarsFolder();
+        fileSystemAppDownloadManager.getJarsFolder();
     }
 
     @Test
     public void getDefaultAppResourceFolderPathWhenPropertiesIsNotContainsAbsFolderProp() throws Exception {
         PowerMockito.when(Props.get(FileSystemAppDownloadManager.PROP_NAME_APP_RESOURCES_PATH_ABS)).thenReturn("");
         Files.createDirectories(Paths.get(defaultResourcesFolder));
-        Assert.assertEquals(new File(defaultResourcesFolder).getAbsolutePath(), AppDownloadManager.getResourcesFolder());
+        Assert.assertEquals(new File(defaultResourcesFolder).getAbsolutePath(), fileSystemAppDownloadManager.getResourcesFolder());
     }
 
     @Test
     public void getAbsoluteAppResourcesPathFolderWhenPropertyFileContainsCorrectAbsPath() throws IOException, InterruptedException {
         PowerMockito.when(Props.get(FileSystemAppDownloadManager.PROP_NAME_APP_RESOURCES_PATH_ABS)).thenReturn(absResourcesFolder);
         createDirIfNotExist(absResourcesFolder);
-        assertEquals(absResourcesFolder, AppDownloadManager.getResourcesFolder());
+        assertEquals(absResourcesFolder, fileSystemAppDownloadManager.getResourcesFolder());
     }
 
     @Test
