@@ -5,8 +5,6 @@ import ru.sbtqa.tag.qautils.properties.Props;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Map;
 
 /**
@@ -19,14 +17,12 @@ public abstract class AppDownloadManager {
     public static final String DEFAULT_APP_JARS_FOLDER = "app/jars";
     public static final String DEFAULT_APP_RESOURCES_FOLDER = "app/resources";
 
-    public static Props props = Props.getInstance();
-
     /**
      * Return a folder path where the application jars are stored.
      *
      * @throws FileNotFoundException If folder is not founded.
      */
-    public static String getJarsFolder() throws FileNotFoundException {
+    public String getJarsFolder() throws FileNotFoundException {
         return getFolderPath(PROP_NAME_APP_JARS_PATH_ABS, DEFAULT_APP_JARS_FOLDER);
     }
 
@@ -35,7 +31,7 @@ public abstract class AppDownloadManager {
      *
      * @throws FileNotFoundException If folder is not founded.
      */
-    public static String getResourcesFolder() throws FileNotFoundException {
+    public String getResourcesFolder() throws FileNotFoundException {
         return getFolderPath(PROP_NAME_APP_RESOURCES_PATH_ABS, DEFAULT_APP_RESOURCES_FOLDER);
     }
 
@@ -45,13 +41,11 @@ public abstract class AppDownloadManager {
      *
      * @throws FileNotFoundException
      */
-    private static String getFolderPath(String absFolderPropName, String defaultPath) throws FileNotFoundException {
+    private String getFolderPath(String absFolderPropName, String defaultPath) throws FileNotFoundException {
         //check abs path from properties
-        String absPath = props.get(absFolderPropName);
-        if (!absPath.isEmpty()) {
-            if (Files.exists(Paths.get(absPath))) {
-                return absPath;
-            }
+        String absPath = Props.get(absFolderPropName);
+        if (!absPath.isEmpty() && new File(absPath).exists()) {
+            return absPath;
         }
         URL resource = FileSystemAppDownloadManager.class.getClassLoader().getResource(defaultPath);
         if (resource != null) {

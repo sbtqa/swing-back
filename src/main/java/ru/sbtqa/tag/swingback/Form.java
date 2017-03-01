@@ -1,10 +1,6 @@
 package ru.sbtqa.tag.swingback;
 
-import org.apache.commons.lang.reflect.FieldUtils;
-import org.apache.commons.lang.reflect.MethodUtils;
-import org.netbeans.jemmy.ComponentChooser;
 import org.netbeans.jemmy.operators.ComponentOperator;
-import org.netbeans.jemmy.operators.ContainerOperator;
 import ru.sbtqa.tag.swingback.annotations.ActionTitle;
 import ru.sbtqa.tag.swingback.annotations.ActionTitles;
 import ru.sbtqa.tag.swingback.annotations.Component;
@@ -27,7 +23,6 @@ import static org.junit.Assert.assertThat;
 public abstract class Form {
 
     private String title;
-    protected ContainerOperator currentCont;
     private List<Field> formFields;
     private List<Method> formMethods;
 
@@ -36,8 +31,7 @@ public abstract class Form {
     }
 
 
-    public Form(ContainerOperator currentCont) {
-        this.currentCont = currentCont;
+    public Form() {
         title = this.getClass().getAnnotation(FormEntry.class).title();
         formMethods = Core.getDeclaredMethods(this.getClass());
         formFields = Core.getDeclaredFields(this.getClass());
@@ -137,34 +131,13 @@ public abstract class Form {
             if (Core.isRequiredAction(method, title)) {
                 try {
                     method.setAccessible(true);
-                    return MethodUtils.invokeMethod(this, method.getName(), param);
-                } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                    return method.invoke(this, param);
+                } catch (IllegalAccessException | InvocationTargetException e) {
                     throw new SwingBackRuntimeException("Failed to invoke method", e);
                 }
             }
         }
         throw new NoSuchMethodException("There is no '" + title + "' method on '" + this.getTitle() + "' form object");
-    }
-
-
-    /**
-     * Return {@link ComponentChooser} component which has a specified title
-     *
-     * @param title a component name
-     * @throws NoSuchFieldException if required field couldn't be found
-     */
-    public ComponentChooser getComponentChooser(String title) throws NoSuchFieldException {
-        for (Field field : formFields) {
-            if (Core.isRequiredField(field, title)) {
-                try {
-                    field.setAccessible(true);
-                    return (ComponentChooser) FieldUtils.readField(field, this);
-                } catch (IllegalAccessException e) {
-                    throw new SwingBackRuntimeException("Failed to read field (ComponentChooser) with name '" + title + "'", e);
-                }
-            }
-        }
-        throw new NoSuchFieldException("There is no '" + title + "' field on '" + this.getTitle() + "' form object");
     }
 
 
@@ -180,7 +153,7 @@ public abstract class Form {
             if (Core.isRequiredField(field, title)) {
                 try {
                     field.setAccessible(true);
-                    return (ComponentOperator) FieldUtils.readField(field, this);
+                    return (ComponentOperator) field.get(this);
                 } catch (IllegalAccessException e) {
                     throw new SwingBackRuntimeException("Failed to read field (ComponentOperator) with name '" + title + "'.", e);
                 }
@@ -190,17 +163,12 @@ public abstract class Form {
     }
 
     /**
-     * Return current form container.
-     */
-    public ContainerOperator getCurrentContainerOperator() {
-        return currentCont;
-    }
-
-
-    /**
      * Helper methods for manipulations on fields and objects
      */
     private static class Core {
+
+        private Core() {
+        }
 
         /**
          * Check whether given method has {@link ActionTitle} annotation with required title

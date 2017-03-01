@@ -1,5 +1,7 @@
 package ru.sbtqa.tag.swingback.download;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.sbtqa.tag.qautils.properties.Props;
 
 import java.io.File;
@@ -15,21 +17,19 @@ import java.util.stream.Stream;
  */
 public class FileSystemAppDownloadManager extends AppDownloadManager {
 
+    private final Logger log = LoggerFactory.getLogger(FileSystemAppDownloadManager.class);
+
     public static final String JVM_PROP_PREFIX = "swingback.jvm.prop.";
     public static final String PROP_NAME_START_CLASS = "swingback.app.startclass";
 
-    public FileSystemAppDownloadManager() {
-        props = Props.getInstance();
-    }
-
     @Override
     public String getStartClassName() {
-        return props.get(PROP_NAME_START_CLASS);
+        return Props.get(PROP_NAME_START_CLASS);
     }
 
     @Override
     public Map<String, String> getSystemProperties() {
-        return props.getProps()
+        return Props.getProps()
                 .entrySet()
                 .stream()
                 .filter(e -> e.getKey().toString().startsWith(JVM_PROP_PREFIX))
@@ -45,7 +45,7 @@ public class FileSystemAppDownloadManager extends AppDownloadManager {
             throw new ApplicationDownloadException("Specified folder isn't exist. Check the properties file.", e);
         }
 
-        if ( jarsFolder.listFiles() != null && jarsFolder.listFiles().length == 0) {
+        if (jarsFolder.listFiles() != null && jarsFolder.listFiles().length == 0) {
             throw new ApplicationDownloadException("Specified folder is empty.");
         }
         return Stream.of(jarsFolder.list())
@@ -67,8 +67,11 @@ public class FileSystemAppDownloadManager extends AppDownloadManager {
     public URL getResourcesURL() {
         try {
             return new File(getResourcesFolder()).toURI().toURL();
-        } catch (FileNotFoundException | MalformedURLException e) {
+        } catch (FileNotFoundException e) {
+            log.info("Resources directory is not specified.", e);
             return null;
+        } catch (MalformedURLException e) {
+            throw new ApplicationDownloadException("An Exception occurred while trying the string uri to URL.", e);
         }
     }
 

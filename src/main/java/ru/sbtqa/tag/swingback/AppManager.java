@@ -73,9 +73,9 @@ public class AppManager {
     /**
      * Run application
      *
-     * @param appJarsAndResources        URLs to the required testing application jars
-     * @param startClassName full start class name
-     * @param sysProps       required system environment properties for testing application
+     * @param appJarsAndResources URLs to the required testing application jars
+     * @param startClassName      full start class name
+     * @param sysProps            required system environment properties for testing application
      */
     public void startApplication(final URL[] appJarsAndResources, final String startClassName, final Map<String, String> sysProps) {
         execute(new Callable<Object>() {
