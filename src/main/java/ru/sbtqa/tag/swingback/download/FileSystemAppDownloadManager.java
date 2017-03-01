@@ -68,7 +68,7 @@ public class FileSystemAppDownloadManager extends AppDownloadManager {
         try {
             return new File(getResourcesFolder()).toURI().toURL();
         } catch (FileNotFoundException e) {
-            log.info("Resources directory is not specified.", e);
+            log.info("Resources directory is not specified or is empty.", e);
             return null;
         } catch (MalformedURLException e) {
             throw new ApplicationDownloadException("An Exception occurred while trying the string uri to URL.", e);
