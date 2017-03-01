@@ -1,5 +1,6 @@
 package ru.sbtqa.tag.swingback.jemmy.components;
 
+import org.netbeans.jemmy.ComponentChooser;
 import org.netbeans.jemmy.operators.ContainerOperator;
 import org.netbeans.jemmy.operators.JTreeOperator;
 
@@ -7,8 +8,8 @@ import javax.swing.tree.TreePath;
 
 public class Tree extends JTreeOperator {
 
-    public Tree(ContainerOperator cont, String text, int row, int index) {
-        super(cont, text, row, index);
+    public Tree(ContainerOperator cont, ComponentChooser chooser) {
+        super(cont, chooser);
     }
 
     /**

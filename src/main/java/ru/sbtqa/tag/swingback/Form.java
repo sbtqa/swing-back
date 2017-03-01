@@ -1,6 +1,6 @@
 package ru.sbtqa.tag.swingback;
 
-import org.netbeans.jemmy.operators.ComponentOperator;
+import org.netbeans.jemmy.operators.*;
 import ru.sbtqa.tag.swingback.annotations.ActionTitle;
 import ru.sbtqa.tag.swingback.annotations.ActionTitles;
 import ru.sbtqa.tag.swingback.annotations.Component;
@@ -103,19 +103,23 @@ public abstract class Form {
         ((ComboBox) getComponentOperator(title)).chooseComboBoxItem(value, String::equals);
     }
 
-//    @ActionTitle("проверяет наличие элемента на форме")
-//    @ActionTitle("check component presence")
-//    public void checkComponentPresence(String title, String value) throws NoSuchFieldException {
-//        assertThat("The component with title '" + title + "' is " +(Boolean.valueOf(value) ? "not " : "") +"presence on form ' " + getTitle() + "'.",
-//                CommonActions.isComponentPresence(getCurrentContainerOperator(), getComponentType(title), getComponentChooser(title)), is(Boolean.valueOf(value)));
-//    }
 
-//    @ActionTitle("проверяет редактируемость элемента")
-//    @ActionTitle("check component editable")
-//    public void checkComponentEditable(String title, String value) throws NoSuchFieldException {
-//        assertThat("The component with title '" + title + "' is " +(Boolean.valueOf(value) ? "not " : "") + "editable.",
-//                CommonActions.isComponentEditable(getCurrentContainerOperator(), getComponentType(title), getComponentChooser(title)), is(Boolean.valueOf(value)));
-//    }
+    @ActionTitle("проверяет редактируемость элемента")
+    @ActionTitle("check component editable")
+    public void checkComponentEditable(String title, String value) throws NoSuchFieldException {
+        boolean isEditable = false;
+        ComponentOperator componentOperator = getComponentOperator(title);
+        if (componentOperator instanceof JTextComponentOperator) {
+            isEditable = ((JTextComponentOperator) componentOperator).isEditable();
+        }
+        if (componentOperator instanceof JCheckBoxOperator) {
+            isEditable = ((JCheckBoxOperator) componentOperator).isEnabled();
+        }
+        if (componentOperator instanceof JButtonOperator) {
+            isEditable = ((JButtonOperator) componentOperator).isEnabled();
+        }
+        assertThat("The component with title '" + title + "' is " + (Boolean.valueOf(value) ? "not " : "") + "editable.", isEditable, is(Boolean.valueOf(value)));
+    }
 
 //    ----------------------------------------------------
 
