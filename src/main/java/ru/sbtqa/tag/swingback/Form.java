@@ -3,19 +3,19 @@ package ru.sbtqa.tag.swingback;
 import org.apache.commons.lang.reflect.FieldUtils;
 import org.apache.commons.lang.reflect.MethodUtils;
 import org.netbeans.jemmy.ComponentChooser;
-import org.netbeans.jemmy.operators.*;
+import org.netbeans.jemmy.operators.ComponentOperator;
+import org.netbeans.jemmy.operators.ContainerOperator;
 import ru.sbtqa.tag.swingback.annotations.ActionTitle;
 import ru.sbtqa.tag.swingback.annotations.ActionTitles;
 import ru.sbtqa.tag.swingback.annotations.Component;
 import ru.sbtqa.tag.swingback.annotations.FormEntry;
-import ru.sbtqa.tag.swingback.jemmy.CommonActions;
+import ru.sbtqa.tag.swingback.jemmy.components.*;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -28,135 +28,100 @@ public abstract class Form {
 
     private String title;
     protected ContainerOperator currentCont;
-    protected JTabbedPaneOperator currentTabbedPane;
     private List<Field> formFields;
     private List<Method> formMethods;
-    private List<Field> formTabbedPanes;
-    private boolean isCurrentTabbedPane;
 
     public String getTitle() {
         return title;
     }
 
-    /**
-     * form component types
-     */
-    public enum ComponentType {
-        TEXT_FIELD,
-        TEXT_AREA,
-        BUTTON,
-        COMBO_BOX,
-        TABBED_PANE,
-        TABLE,
-        CHECK_BOX,
-        TREE,
-        LABEL,
-        RADIO_BUTTON,
-        OTHER
-    }
 
-    public Form() {
+    public Form(ContainerOperator currentCont) {
+        this.currentCont = currentCont;
         title = this.getClass().getAnnotation(FormEntry.class).title();
         formMethods = Core.getDeclaredMethods(this.getClass());
         formFields = Core.getDeclaredFields(this.getClass());
-        formTabbedPanes = new LinkedList<>();
-        for (Field field : formFields) {
-            if (Core.isRequiredField(field, ComponentType.TABBED_PANE)) {
-                formTabbedPanes.add(field);
-            }
-        }
     }
 
 
     @ActionTitle("нажимает на кнопку")
     @ActionTitle("push button")
     public void pushButton(String title) throws NoSuchFieldException {
-        ComponentChooser ch = getComponentChooser(title);
-        new JButtonOperator(getCurrentContainerOperator(), ch).push();
+        ((Button) getComponentOperator(title)).push();
     }
 
     @ActionTitle("проверяет, что таблица пуста")
     @ActionTitle("check table is empty")
     public void tableIsEmpty(String title) throws NoSuchFieldException {
         assertThat("The table with title '" + title + "' is not empty.",
-                new JTableOperator(getCurrentContainerOperator(), getComponentChooser(title)).getRowCount(), is(0));
+                ((Table) getComponentOperator(title)).getRowCount(), is(0));
     }
 
     @ActionTitle("нажимает на заголовок столбца")
     @ActionTitle("click on table column title")
     public void clickOnTableColumnTitle(String title, String columnTitle) throws NoSuchFieldException {
-        CommonActions.clickOnTableColumnTitle(new JTableOperator(getCurrentContainerOperator(), getComponentChooser(title)), columnTitle);
+        ((Table) getComponentOperator(title)).clickOnTableColumnTitle(columnTitle);
     }
 
     @ActionTitle("выделяет первую запись таблицы")
-    @ActionTitle("select the first table row")
-    public void selectFistTableElem(String title) throws NoSuchFieldException {
-        CommonActions.selectFistTableElem(new JTableOperator(getCurrentContainerOperator(), getComponentChooser(title)));
-    }
-
-    @ActionTitle("выбирает первую запись в таблице")
     @ActionTitle("select first table row")
-    public void selectFirstTableRow(String title) throws NoSuchFieldException {
-        ComponentChooser ch = getComponentChooser(title);
-        CommonActions.selectFistTableElem(new JTableOperator(getCurrentContainerOperator(), ch));
+    public void selectFistTableElem(String title) throws NoSuchFieldException {
+        ((Table) getComponentOperator(title)).selectFistTableElem();
     }
 
     @ActionTitle("разворачивает дерево")
     @ActionTitle("expand tree")
     public void expandTree(String title, String path) throws NoSuchFieldException {
-        ComponentChooser ch = getComponentChooser(title);
         String[] paths = path.split("->");
-        CommonActions.chooseTreeNode(new JTreeOperator(getCurrentContainerOperator(), ch), paths);
+        ((Tree) getComponentOperator(title)).chooseTreeNode(paths);
     }
 
     @ActionTitle("заполняет поле")
     @ActionTitle("fill field")
     public void fillField(String title, String value) throws NoSuchFieldException {
-        ComponentChooser ch = getComponentChooser(title);
-        new JTextComponentOperator(getCurrentContainerOperator(), ch).setText(value);
+        ((TextField) getComponentOperator(title)).setText(value);
     }
 
 
     @ActionTitle("устанавливает чекбокс")
     @ActionTitle("set checkbox")
     public void setCheckBox(String title, String value) throws NoSuchFieldException {
-        ComponentChooser ch = getComponentChooser(title);
-        CommonActions.setCheckBox(getCurrentContainerOperator(), ch, Boolean.valueOf(value));
+        ((CheckBox) getComponentOperator(title)).setCheckBox(Boolean.valueOf(value));
     }
 
     @ActionTitle("проверяет, что чекбокс выставлен")
     @ActionTitle("check that checkbox is selected")
     public void checkSelectedCheckBox(String title) throws NoSuchFieldException {
         assertThat("The checkbox with title '" + title + "' is not selected.",
-                CommonActions.isSelectedCheckBox(getCurrentContainerOperator(), getComponentChooser(title)), is(true));
+                ((CheckBox) getComponentOperator(title)).isSelected(), is(true));
     }
 
     @ActionTitle("проверяет, что чекбокс невыставлен")
     @ActionTitle("check that checkbox is not selected")
     public void checkUnSelectedCheckBox(String title) throws NoSuchFieldException {
         assertThat("The checkbox with title '" + title + "' is selected.",
-                CommonActions.isSelectedCheckBox(getCurrentContainerOperator(), getComponentChooser(title)), is(false));
+                ((CheckBox) getComponentOperator(title)).isSelected(), is(false));
     }
 
     @ActionTitle("выбирает элемент из выпадающего списка")
     @ActionTitle("choose combobox item")
     public void chooseComboBoxItem(String title, String value) throws NoSuchFieldException {
-        CommonActions.chooseComboBoxItem(new JComboBoxOperator(getCurrentContainerOperator(), getComponentChooser(title)), value, String::equals);
+        ((ComboBox) getComponentOperator(title)).chooseComboBoxItem(value, String::equals);
     }
 
-    @ActionTitle("проверяет наличие элемента на форме")
-    @ActionTitle("check component presence")
-    public void checkComponentPresence(String title, String value) throws NoSuchFieldException {
-        assertThat("The component with title '" + title + "' is " +(Boolean.valueOf(value) ? "not " : "") +"presence on form ' " + getTitle() + "'.",
-                CommonActions.isComponentPresence(getCurrentContainerOperator(), getComponentType(title), getComponentChooser(title)), is(Boolean.valueOf(value)));
-    }
+//    @ActionTitle("проверяет наличие элемента на форме")
+//    @ActionTitle("check component presence")
+//    public void checkComponentPresence(String title, String value) throws NoSuchFieldException {
+//        assertThat("The component with title '" + title + "' is " +(Boolean.valueOf(value) ? "not " : "") +"presence on form ' " + getTitle() + "'.",
+//                CommonActions.isComponentPresence(getCurrentContainerOperator(), getComponentType(title), getComponentChooser(title)), is(Boolean.valueOf(value)));
+//    }
 
-    @ActionTitle("проверяет редактируемость элемента")
-    @ActionTitle("check component editable")
-    public void checkComponentEditable(String title, String value) throws NoSuchFieldException {
-        assertThat("The component with title '" + title + "' is " +(Boolean.valueOf(value) ? "not " : "") + "editable.",
-                CommonActions.isComponentEditable(getCurrentContainerOperator(), getComponentType(title), getComponentChooser(title)), is(Boolean.valueOf(value)));
-    }
+//    @ActionTitle("проверяет редактируемость элемента")
+//    @ActionTitle("check component editable")
+//    public void checkComponentEditable(String title, String value) throws NoSuchFieldException {
+//        assertThat("The component with title '" + title + "' is " +(Boolean.valueOf(value) ? "not " : "") + "editable.",
+//                CommonActions.isComponentEditable(getCurrentContainerOperator(), getComponentType(title), getComponentChooser(title)), is(Boolean.valueOf(value)));
+//    }
 
 //    ----------------------------------------------------
 
@@ -202,39 +167,22 @@ public abstract class Form {
         throw new NoSuchFieldException("There is no '" + title + "' field on '" + this.getTitle() + "' form object");
     }
 
-    /**
-     * Find the component type {@link ComponentType} a component with specified title
-     *
-     * @param title component title
-     * @return component type
-     * @throws NoSuchFieldException if required field couldn't be found
-     */
-    public ComponentType getComponentType(String title) throws NoSuchFieldException {
-        for (Field field : formFields) {
-            if (Core.isRequiredField(field, title)) {
-                field.setAccessible(true);
-                return field.getAnnotation(Component.class).type();
-            }
-        }
-        throw new NoSuchFieldException("There is no '" + title + "' field on '" + this.getTitle() + "' form object");
-    }
 
     /**
      * Find component operator {@link ComponentOperator} element which has specified type and title
      *
-     * @param type  component type
      * @param title component title
      * @return ComponentOperator with specified type and title
      * @throws NoSuchFieldException if required field couldn't be found
      */
-    public ComponentOperator getComponentOperator(ComponentType type, String title) throws NoSuchFieldException {
+    public ComponentOperator getComponentOperator(String title) throws NoSuchFieldException {
         for (Field field : formFields) {
-            if (Core.isRequiredField(field, title) & Core.isRequiredField(field, type)) {
+            if (Core.isRequiredField(field, title)) {
                 try {
                     field.setAccessible(true);
                     return (ComponentOperator) FieldUtils.readField(field, this);
                 } catch (IllegalAccessException e) {
-                    throw new SwingBackRuntimeException("Failed to read field (ComponentOperator) with name '" + title + "' and type '" + type + "'.", e);
+                    throw new SwingBackRuntimeException("Failed to read field (ComponentOperator) with name '" + title + "'.", e);
                 }
             }
         }
@@ -245,35 +193,9 @@ public abstract class Form {
      * Return current form container.
      */
     public ContainerOperator getCurrentContainerOperator() {
-            return isCurrentTabbedPane ? currentTabbedPane : currentCont;
+        return currentCont;
     }
 
-    /**
-     * Switch current container to the container.
-     */
-    public void switchToContainer() {
-        isCurrentTabbedPane = false;
-    }
-
-    /**
-     * Switch current container to a pane of the tapped pane.
-     * Required pane is looked up by title at all tabbed panes this form.
-     *
-     * @param title title of the required pane
-     */
-    public void selectTabPane(String title, String page) throws NoSuchFieldException {
-        System.err.println("Inside select " + title + " " + page);
-        ComponentChooser tpChooser = getComponentChooser(title);
-        System.err.println("Inside select " + tpChooser);
-        currentTabbedPane = new JTabbedPaneOperator(currentCont, tpChooser);
-        System.err.println("currentTabbedPane.findPage(page) " + currentTabbedPane.findPage(page));
-        if (currentTabbedPane.findPage(page) != -1) {
-            currentTabbedPane.selectPage(page);
-            isCurrentTabbedPane = true;
-            return;
-        }
-        throw new NoSuchFieldException("There is no tabbed pane with title '" + title + "' on '" + this.getTitle() + "' form object");
-    }
 
     /**
      * Helper methods for manipulations on fields and objects
@@ -316,21 +238,6 @@ public abstract class Form {
             return componentListList.stream().filter(comInf -> comInf.title().equals(title)).findFirst().isPresent();
         }
 
-        /**
-         * Check whether given field has {@link Component} annotation with required type
-         *
-         * @param field field to check
-         * @param type  required type
-         * @return true|false
-         */
-        private static boolean isRequiredField(Field field, ComponentType type) {
-            Component component = field.getAnnotation(Component.class);
-            List<Component> componentListList = new ArrayList<>();
-            if (component != null) {
-                componentListList.add(component);
-            }
-            return componentListList.stream().filter(comInf -> comInf.type().equals(type)).findFirst().isPresent();
-        }
 
         /**
          * Return a list of methods declared in the given class and its superclasses

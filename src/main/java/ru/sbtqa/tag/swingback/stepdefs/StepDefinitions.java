@@ -3,6 +3,7 @@ package ru.sbtqa.tag.swingback.stepdefs;
 import cucumber.api.DataTable;
 import cucumber.api.java.en.And;
 import cucumber.api.java.ru.И;
+import org.netbeans.jemmy.operators.JTabbedPaneOperator;
 import ru.sbtqa.tag.swingback.AppManager;
 import ru.sbtqa.tag.swingback.TestContext;
 import ru.sbtqa.tag.swingback.exceptions.FormInitializationException;
@@ -54,26 +55,12 @@ public class StepDefinitions {
         AppManager.getInstance().execute(new Callable<Object>() {
             @Override
             public Object call() throws Exception {
-                TestContext.getCurrentForm().selectTabPane(title, pane);
+                ((JTabbedPaneOperator) TestContext.getCurrentForm().getComponentOperator(title)).selectPage(pane);
                 return null;
             }
         });
     }
 
-    /**
-     * Switch context back to the container
-     */
-    @And("^user working with form$")
-    @И("^(?:пользователь |он |)работает с формой$")
-    public void workingWithForm() {
-        AppManager.getInstance().execute(new Callable<Object>() {
-            @Override
-            public Object call() throws Exception {
-                TestContext.getCurrentForm().switchToContainer();
-                return null;
-            }
-        });
-    }
 
     /**
      * waining in seconds for a specified time

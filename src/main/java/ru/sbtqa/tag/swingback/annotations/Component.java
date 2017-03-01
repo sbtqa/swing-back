@@ -1,7 +1,5 @@
 package ru.sbtqa.tag.swingback.annotations;
 
-import ru.sbtqa.tag.swingback.Form;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -20,8 +18,4 @@ public @interface Component {
      */
     String title();
 
-    /**
-     * Component type
-     */
-    Form.ComponentType type();
 }
