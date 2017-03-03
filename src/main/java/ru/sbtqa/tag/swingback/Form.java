@@ -5,6 +5,7 @@ import ru.sbtqa.tag.swingback.annotations.ActionTitle;
 import ru.sbtqa.tag.swingback.annotations.ActionTitles;
 import ru.sbtqa.tag.swingback.annotations.Component;
 import ru.sbtqa.tag.swingback.annotations.FormEntry;
+import ru.sbtqa.tag.swingback.exceptions.SwingBackRuntimeException;
 import ru.sbtqa.tag.swingback.jemmy.components.*;
 
 import java.lang.reflect.Field;
@@ -26,87 +27,86 @@ public abstract class Form {
     private List<Field> formFields;
     private List<Method> formMethods;
 
-    public String getTitle() {
-        return title;
-    }
-
-
     public Form() {
         title = this.getClass().getAnnotation(FormEntry.class).title();
         formMethods = Core.getDeclaredMethods(this.getClass());
         formFields = Core.getDeclaredFields(this.getClass());
     }
 
+    public String getTitle() {
+        return title;
+    }
+
 
     @ActionTitle("нажимает на кнопку")
     @ActionTitle("push button")
-    public void pushButton(String title) throws NoSuchFieldException {
+    public void pushButton(String title) {
         ((Button) getComponentOperator(title)).push();
     }
 
     @ActionTitle("проверяет, что таблица пуста")
     @ActionTitle("check table is empty")
-    public void tableIsEmpty(String title) throws NoSuchFieldException {
+    public void tableIsEmpty(String title) {
         assertThat("The table with title '" + title + "' is not empty.",
                 ((Table) getComponentOperator(title)).getRowCount(), is(0));
     }
 
     @ActionTitle("нажимает на заголовок столбца")
     @ActionTitle("click on table column title")
-    public void clickOnTableColumnTitle(String title, String columnTitle) throws NoSuchFieldException {
+    public void clickOnTableColumnTitle(String title, String columnTitle) {
         ((Table) getComponentOperator(title)).clickOnTableColumnTitle(columnTitle);
     }
 
     @ActionTitle("выделяет первую запись таблицы")
     @ActionTitle("select first table row")
-    public void selectFistTableElem(String title) throws NoSuchFieldException {
+    public void selectFistTableElem(String title) {
         ((Table) getComponentOperator(title)).selectFistTableElem();
     }
 
     @ActionTitle("разворачивает дерево")
     @ActionTitle("expand tree")
-    public void expandTree(String title, String path) throws NoSuchFieldException {
+    public void expandTree(String title, String path) {
         String[] paths = path.split("->");
         ((Tree) getComponentOperator(title)).chooseTreeNode(paths);
     }
 
     @ActionTitle("заполняет поле")
     @ActionTitle("fill field")
-    public void fillField(String title, String value) throws NoSuchFieldException {
+    public void fillField(String title, String value) {
         ((TextField) getComponentOperator(title)).setText(value);
     }
 
 
     @ActionTitle("устанавливает чекбокс")
     @ActionTitle("set checkbox")
-    public void setCheckBox(String title, String value) throws NoSuchFieldException {
+    public void setCheckBox(String title, String value) {
         ((CheckBox) getComponentOperator(title)).setCheckBox(Boolean.valueOf(value));
     }
 
     @ActionTitle("проверяет, что чекбокс выставлен")
     @ActionTitle("check that checkbox is selected")
-    public void checkSelectedCheckBox(String title) throws NoSuchFieldException {
+    public void checkSelectedCheckBox(String title) {
         assertThat("The checkbox with title '" + title + "' is not selected.",
                 ((CheckBox) getComponentOperator(title)).isSelected(), is(true));
     }
 
     @ActionTitle("проверяет, что чекбокс невыставлен")
     @ActionTitle("check that checkbox is not selected")
-    public void checkUnSelectedCheckBox(String title) throws NoSuchFieldException {
+    public void checkUnSelectedCheckBox(String title) {
         assertThat("The checkbox with title '" + title + "' is selected.",
                 ((CheckBox) getComponentOperator(title)).isSelected(), is(false));
     }
 
     @ActionTitle("выбирает элемент из выпадающего списка")
     @ActionTitle("choose combobox item")
-    public void chooseComboBoxItem(String title, String value) throws NoSuchFieldException {
+    public void chooseComboBoxItem(String title, String value) {
         ((ComboBox) getComponentOperator(title)).chooseComboBoxItem(value, String::equals);
     }
 
 
     @ActionTitle("проверяет редактируемость элемента")
     @ActionTitle("check component editable")
-    public void checkComponentEditable(String title, String value) throws NoSuchFieldException {
+    public void checkComponentEditable(String title, String value) {
         boolean isEditable = false;
         ComponentOperator componentOperator = getComponentOperator(title);
         if (componentOperator instanceof JTextComponentOperator) {
@@ -128,9 +128,8 @@ public abstract class Form {
      *
      * @param title title of the method to call
      * @param param parameters that will be passed to method
-     * @throws java.lang.NoSuchMethodException if required method couldn't be found
      */
-    public Object executeMethodByTitle(String title, Object... param) throws NoSuchMethodException {
+    public Object executeMethodByTitle(String title, Object... param) {
         for (Method method : formMethods) {
             if (Core.isRequiredAction(method, title)) {
                 try {
@@ -141,7 +140,7 @@ public abstract class Form {
                 }
             }
         }
-        throw new NoSuchMethodException("There is no '" + title + "' method on '" + this.getTitle() + "' form object");
+        throw new SwingBackRuntimeException(new NoSuchMethodException("There is no '" + title + "' method on '" + this.getTitle() + "' form object"));
     }
 
 
@@ -150,9 +149,8 @@ public abstract class Form {
      *
      * @param title component title
      * @return ComponentOperator with specified type and title
-     * @throws NoSuchFieldException if required field couldn't be found
      */
-    public ComponentOperator getComponentOperator(String title) throws NoSuchFieldException {
+    public ComponentOperator getComponentOperator(String title) {
         for (Field field : formFields) {
             if (Core.isRequiredField(field, title)) {
                 try {
@@ -163,7 +161,7 @@ public abstract class Form {
                 }
             }
         }
-        throw new NoSuchFieldException("There is no '" + title + "' field on '" + this.getTitle() + "' form object");
+        throw new SwingBackRuntimeException(new NoSuchFieldException("There is no '" + title + "' field on '" + this.getTitle() + "' form object"));
     }
 
     /**

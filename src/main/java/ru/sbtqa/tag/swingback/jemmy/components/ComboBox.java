@@ -3,7 +3,7 @@ package ru.sbtqa.tag.swingback.jemmy.components;
 import org.netbeans.jemmy.ComponentChooser;
 import org.netbeans.jemmy.operators.ContainerOperator;
 import org.netbeans.jemmy.operators.JComboBoxOperator;
-import ru.sbtqa.tag.swingback.SwingBackRuntimeException;
+import ru.sbtqa.tag.swingback.exceptions.SwingBackRuntimeException;
 
 import java.awt.event.KeyEvent;
 import java.util.LinkedList;

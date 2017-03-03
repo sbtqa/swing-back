@@ -18,17 +18,14 @@ public class ReflectionUtil {
     }
 
     public static Class<?> getClassByFormEntryTitle(String packageName, String title) {
-        //TODO: 23.01.2017
         ClassLoader loader = Form.class.getClassLoader();
         Set<Class<?>> allClasses = new HashSet<>();
         try {
             ClassPath.from(loader)
                     .getAllClasses()
                     .stream()
-                    .filter((info) -> (info.getName().startsWith(packageName + ".")))
-                    .forEach((info) -> {
-                        allClasses.add(info.load());
-                    });
+                    .filter(info -> info.getName().startsWith(packageName + "."))
+                    .forEach(info -> allClasses.add(info.load()));
         } catch (IOException ex) {
             log.warn("Failed to shape class info set", ex);
         }

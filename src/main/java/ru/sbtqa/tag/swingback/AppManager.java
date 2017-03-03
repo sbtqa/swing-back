@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.sbtqa.tag.swingback.download.AppDownloadManager;
 import ru.sbtqa.tag.swingback.download.FileSystemAppDownloadManager;
+import ru.sbtqa.tag.swingback.exceptions.AppManagerException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
@@ -25,12 +26,12 @@ public class AppManager {
 
     private static AppManager instance;
 
-    private final Logger log;
+    private static final Logger LOG = LoggerFactory.getLogger(AppManager.class);
+
     private final Cloud cloud;
     private final ViNode allNodes;
 
     private AppManager() {
-        log = LoggerFactory.getLogger(AppManager.class);
         cloud = CloudFactory.createCloud();
         cloud.node("**").x(VX.TYPE).setLocal();
         cloud.node("node1");

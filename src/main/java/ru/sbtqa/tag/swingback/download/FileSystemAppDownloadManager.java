@@ -3,6 +3,7 @@ package ru.sbtqa.tag.swingback.download;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.sbtqa.tag.qautils.properties.Props;
+import ru.sbtqa.tag.swingback.exceptions.ApplicationDownloadException;
 
 import java.io.File;
 import java.io.FileNotFoundException;

@@ -1,9 +1,6 @@
-package ru.sbtqa.tag.swingback.download;
+package ru.sbtqa.tag.swingback.exceptions;
 
 public class ApplicationDownloadException extends RuntimeException {
-
-    public ApplicationDownloadException() {
-    }
 
     public ApplicationDownloadException(String message) {
         super(message);

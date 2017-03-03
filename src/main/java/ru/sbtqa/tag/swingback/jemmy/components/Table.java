@@ -4,6 +4,8 @@ import org.netbeans.jemmy.ComponentChooser;
 import org.netbeans.jemmy.operators.ContainerOperator;
 import org.netbeans.jemmy.operators.JTableHeaderOperator;
 import org.netbeans.jemmy.operators.JTableOperator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.util.LinkedHashMap;
@@ -13,6 +15,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Table extends JTableOperator {
+
+    private static final Logger LOG = LoggerFactory.getLogger(JTableOperator.class);
 
     public Table(ContainerOperator cont, ComponentChooser chooser) {
         super(cont, chooser);
@@ -149,7 +153,7 @@ public class Table extends JTableOperator {
             try {
                 res = this.getHeaderOperator().getColumnModel().getColumnIndex(columnName);
             } catch (IllegalArgumentException e) {
-//                LOG.info("Column is not founded.", e);
+                LOG.info("Column is not founded." , e);
                 return -1;
             }
         }

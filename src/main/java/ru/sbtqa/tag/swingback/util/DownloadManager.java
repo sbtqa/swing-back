@@ -39,9 +39,7 @@ public class DownloadManager {
      * @throws IOException
      */
     public byte[] download() throws IOException {
-        byte[] downloadContent = IOUtils.toByteArray(this.getUri());
-        return downloadContent;
-
+        return IOUtils.toByteArray(this.getUri());
     }
 
     /**
