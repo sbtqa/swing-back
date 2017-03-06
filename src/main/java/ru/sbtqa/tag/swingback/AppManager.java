@@ -79,6 +79,16 @@ public class AppManager {
      * @param sysProps            required system environment properties for testing application
      */
     public void startApplication(final URL[] appJarsAndResources, final String startClassName, final Map<String, String> sysProps) {
+        // debug run
+        String jarsString = null;
+        if (LOG.isDebugEnabled()) {
+            jarsString = Arrays.toString(appJarsAndResources);
+        }
+        LOG.debug("Application starts with params: " +
+                "\nURLS: %s " +
+                "\nStart class name: %s" +
+                "\nSystem properties: %s", jarsString, startClassName, sysProps);
+
         execute(new Callable<Object>() {
             @Override
             public Object call() throws Exception {
