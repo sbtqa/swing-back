@@ -74,6 +74,7 @@ public class StepDefinitions {
         try {
             SECONDS.sleep(Long.parseLong(wait));
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             throw new SwingBackRuntimeException(e);
         }
     }
