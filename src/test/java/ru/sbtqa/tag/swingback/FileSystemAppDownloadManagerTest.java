@@ -42,7 +42,7 @@ public class FileSystemAppDownloadManagerTest {
     private FileSystemAppDownloadManager fileSystemAppDownloadManager;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() throws IOException {
         PowerMockito.mockStatic(Props.class);
         fileSystemAppDownloadManager = new FileSystemAppDownloadManager();
         createDirIfNotExist(configPath);
@@ -68,7 +68,7 @@ public class FileSystemAppDownloadManagerTest {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() throws IOException {
         deleteIfExist(propFilePath);
         deleteIfExist(configPath);
         deleteIfExist(defaultJarsFolder);
