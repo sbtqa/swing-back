@@ -1,4 +1,4 @@
-package ru.sbtqa.tag.swingback;
+package ru.sbtqa.tag.swingback.exceptions;
 
 public class AppManagerException extends RuntimeException {
     

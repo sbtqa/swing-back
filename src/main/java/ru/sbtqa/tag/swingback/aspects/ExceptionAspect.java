@@ -22,7 +22,7 @@ public class ExceptionAspect {
                 throw throwables[i];
             }
         }
-        throw throwable;
+        throw throwable.getCause();
     }
 
 }
