@@ -31,6 +31,23 @@ If you want to specify a custom location with jars you should to add more parame
 
 In this case swing-back will search the jars and resources in the folder specified folders.
 
+### Searching element on form
+
+For finding form element use choosers.
+There are some choosers in priority order for easy to use.
+
+* ComponentChooserByName (determine element by name swing component.)
+
+* ComponentChooserByToolTip (determine element by tool tip swing component.)
+
+* ComponentChooserByText (determine element by text swing component.)
+
+* ComponentChooserByIndex (determine element by index among other components with the same type).
+
+* ComponentChooserByCoordinates (determine element by coordinates swing components.)
+
+You can write yourself chooser by analogy.
+
 ### Test example
 
 There is example of using the swing-back with comments.
