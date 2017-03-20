@@ -17,8 +17,7 @@ public class StepDefinitions {
     /**
      * Start the application.
      */
-    @And("^user open the application$")
-    @И("(?:пользователь |он |)открывает приложение$")
+    @And("openApp")
     public void startApp() {
         AppManager.getInstance().startApplication();
     }
@@ -26,14 +25,12 @@ public class StepDefinitions {
     /**
      * Closing of application
      */
-    @And("^user close the application$")
-    @И("(?:пользователь |он |)закрывает приложение$")
+    @And("closeApp")
     public void closeApp() {
         AppManager.getInstance().stopApplication();
     }
 
-    @And("^opening form \"(.*?)\"$")
-    @И("^открывается форма \"(.*?)\"$")
+    @And("openForm")
     public void openForm(String title) {
         AppManager.getInstance().execute(new Callable<Object>() {
             @Override
@@ -50,8 +47,7 @@ public class StepDefinitions {
      * @param pane  pane name
      * @param title tabbed pane title
      */
-    @And("^user select the tab \"(.*?)\" on the tabbed pane \"(.*?)\"$")
-    @И("^(?:пользователь |он |)переходит на вкладку \"(.*?)\" в окне с вкалдками \"(.*?)\"$")
+    @And("moveToTab")
     public void selectTabe(String pane, String title) {
         AppManager.getInstance().execute(new Callable<Object>() {
             @Override
@@ -68,8 +64,7 @@ public class StepDefinitions {
      *
      * @param wait
      */
-    @And("^wait (.*?) sec$")
-    @И("^ожидание (.*?) сек$")
+    @And("wait")
     public void wait(String wait) {
         try {
             SECONDS.sleep(Long.parseLong(wait));
@@ -85,8 +80,7 @@ public class StepDefinitions {
      *
      * @param action title of the action to execute
      */
-    @And("^(?:user |)\\((.*?)\\)$")
-    @И("^(?:пользователь |он)\\((.*?)\\)$")
+    @And("userActionNoParams")
     public void userActionNoParams(String action) {
         AppManager.getInstance().execute(new Callable<Void>() {
             @Override
@@ -104,8 +98,7 @@ public class StepDefinitions {
      * @param action title of the action to execute
      * @param param  parameter
      */
-    @And("^(?:user |)\\((.*?)\\) (?:with param |)\"([^\"]*)\"$")
-    @И("^(?:пользователь |он)\\((.*?)\\) (?:с параметром |)\"([^\"]*)\"$")
+    @And("userActionOneParam")
     public void userActionOneParam(String action, String param) {
         AppManager.getInstance().execute(new Callable<Object>() {
             @Override
@@ -124,8 +117,7 @@ public class StepDefinitions {
      * @param param1 first parameter
      * @param param2 second parameter
      */
-    @And("^user \\((.*?)\\) (?:with the parameters |)\"([^\"]*)\" \"([^\"]*)\"$")
-    @И("^(?:пользователь |он |)\\((.*?)\\) (?:с параметрарми |)\"([^\"]*)\" \"([^\"]*)\"$")
+    @And("userActionTwoParams")
     public void userActionTwoParams(String action, String param1, String param2) {
         AppManager.getInstance().execute(new Callable<Void>() {
             @Override
@@ -145,8 +137,7 @@ public class StepDefinitions {
      * @param param2 second parameter
      * @param param3 third parameter
      */
-    @And("^user \\((.*?)\\) (?:with the parameters |)\"([^\"]*)\" \"([^\"]*)\" \"([^\"]*)\"$")
-    @И("^(?:пользователь |он |)\\((.*?)\\) (?:с параметрарми |)\"([^\"]*)\" \"([^\"]*)\" \"([^\"]*)\"$")
+    @And("userActionThreeParams")
     public void userActionThreeParams(String action, String param1, String param2, String param3) {
         AppManager.getInstance().execute(new Callable<Void>() {
             @Override
@@ -164,8 +155,7 @@ public class StepDefinitions {
      * @param action    title of the action to execute
      * @param dataTable table of parameters
      */
-    @And("^user \\((.*?)\\) data$")
-    @И("^(?:пользователь |он |)\\((.*?)\\) данными$")
+    @And("userActionTableParam")
     public void userActionTableParam(String action, DataTable dataTable) {
         AppManager.getInstance().execute(new Callable<Void>() {
             @Override
@@ -184,8 +174,7 @@ public class StepDefinitions {
      * @param param     parameter
      * @param dataTable table of parameters
      */
-    @And("^user \\((.*?)\\) [^\"]*\"([^\"]*) data$")
-    @И("^(?:пользователь |он |)\\((.*?)\\) [^\"]*\"([^\"]*)\" данными$")
+    @And("userDoActionWithObject")
     public void userDoActionWithObject(String action, String param, DataTable dataTable) {
         AppManager.getInstance().execute(new Callable<Void>() {
             @Override
