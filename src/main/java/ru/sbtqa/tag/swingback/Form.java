@@ -1,9 +1,11 @@
 package ru.sbtqa.tag.swingback;
 
-import org.netbeans.jemmy.operators.*;
+import org.netbeans.jemmy.operators.ComponentOperator;
+import org.netbeans.jemmy.operators.JButtonOperator;
+import org.netbeans.jemmy.operators.JCheckBoxOperator;
+import org.netbeans.jemmy.operators.JTextComponentOperator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.sbtqa.tag.cucumber.TagCucumber;
 import ru.sbtqa.tag.qautils.i18n.I18N;
 import ru.sbtqa.tag.qautils.i18n.I18NRuntimeException;
 import ru.sbtqa.tag.swingback.annotations.ActionTitle;
@@ -185,7 +187,7 @@ public abstract class Form {
             for (ActionTitle action : actionList) {
                 String actionValue = action.value();
                 try {
-                    I18N i18n = I18N.getI18n(method.getDeclaringClass(), TagCucumber.getFeature().getI18n().getLocale(), I18N.DEFAULT_BUNDLE_PATH);
+                    I18N i18n = I18N.getI18n(method.getDeclaringClass(), Bridge.getLocale(), I18N.DEFAULT_BUNDLE_PATH);
                     actionValue = i18n.get(action.value());
                 } catch (I18NRuntimeException e) {
                     LOG.debug("There is no bundle for translation class. Leave it as is", e);
