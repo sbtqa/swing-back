@@ -16,7 +16,7 @@ public class StepDefinitions {
     /**
      * Start the application.
      */
-    @And("openApp")
+    @And("SBopenApp")
     public void startApp() {
         AppManager.getInstance().startApplication();
     }
@@ -24,12 +24,12 @@ public class StepDefinitions {
     /**
      * Closing of application
      */
-    @And("closeApp")
+    @And("sbCloseApp")
     public void closeApp() {
         AppManager.getInstance().stopApplication();
     }
 
-    @And("openForm")
+    @And("sbOpenForm")
     public void openForm(String title) {
         AppManager.getInstance().execute(new Callable<Object>() {
             @Override
@@ -46,7 +46,7 @@ public class StepDefinitions {
      * @param pane  pane name
      * @param title tabbed pane title
      */
-    @And("moveToTab")
+    @And("sbMoveToTab")
     public void selectTabe(String pane, String title) {
         AppManager.getInstance().execute(new Callable<Object>() {
             @Override
@@ -63,7 +63,7 @@ public class StepDefinitions {
      *
      * @param wait
      */
-    @And("wait")
+    @And("sbWait")
     public void wait(String wait) {
         try {
             SECONDS.sleep(Long.parseLong(wait));
@@ -79,7 +79,7 @@ public class StepDefinitions {
      *
      * @param action title of the action to execute
      */
-    @And("userActionNoParams")
+    @And("sbUserActionNoParams")
     public void userActionNoParams(String action) {
         AppManager.getInstance().execute(new Callable<Void>() {
             @Override
@@ -97,7 +97,7 @@ public class StepDefinitions {
      * @param action title of the action to execute
      * @param param  parameter
      */
-    @And("userActionOneParam")
+    @And("sbUserActionOneParam")
     public void userActionOneParam(String action, String param) {
         AppManager.getInstance().execute(new Callable<Object>() {
             @Override
@@ -116,7 +116,7 @@ public class StepDefinitions {
      * @param param1 first parameter
      * @param param2 second parameter
      */
-    @And("userActionTwoParams")
+    @And("sbUserActionTwoParams")
     public void userActionTwoParams(String action, String param1, String param2) {
         AppManager.getInstance().execute(new Callable<Void>() {
             @Override
@@ -136,7 +136,7 @@ public class StepDefinitions {
      * @param param2 second parameter
      * @param param3 third parameter
      */
-    @And("userActionThreeParams")
+    @And("sbUserActionThreeParams")
     public void userActionThreeParams(String action, String param1, String param2, String param3) {
         AppManager.getInstance().execute(new Callable<Void>() {
             @Override
@@ -154,7 +154,7 @@ public class StepDefinitions {
      * @param action    title of the action to execute
      * @param dataTable table of parameters
      */
-    @And("userActionTableParam")
+    @And("sbUserActionTableParam")
     public void userActionTableParam(String action, DataTable dataTable) {
         AppManager.getInstance().execute(new Callable<Void>() {
             @Override
@@ -173,7 +173,7 @@ public class StepDefinitions {
      * @param param     parameter
      * @param dataTable table of parameters
      */
-    @And("userDoActionWithObject")
+    @And("sbUserDoActionWithObject")
     public void userDoActionWithObject(String action, String param, DataTable dataTable) {
         AppManager.getInstance().execute(new Callable<Void>() {
             @Override

@@ -47,57 +47,57 @@ public abstract class Form {
     }
 
 
-    @ActionTitle("push.button")
+    @ActionTitle("sb.push.button")
     public void pushButton(String title) {
         ((Button) getComponentOperator(title)).push();
     }
 
-    @ActionTitle("table.is.empty")
+    @ActionTitle("sb.table.is.empty")
     public void tableIsEmpty(String title) {
         assertThat("The table with title '" + title + "' is not empty.",
                 ((Table) getComponentOperator(title)).getRowCount(), is(0));
     }
 
-    @ActionTitle("click.table.column")
+    @ActionTitle("sb.click.table.column")
     public void clickOnTableColumnTitle(String title, String columnTitle) {
         ((Table) getComponentOperator(title)).clickOnTableColumnTitle(columnTitle);
     }
 
-    @ActionTitle("select.first.table.row")
+    @ActionTitle("sb.select.first.table.row")
     public void selectFistTableElem(String title) {
         ((Table) getComponentOperator(title)).selectFistTableElem();
     }
 
-    @ActionTitle("expand.tree")
+    @ActionTitle("sb.expand.tree")
     public void expandTree(String title, String path) {
         String[] paths = path.split("->");
         ((Tree) getComponentOperator(title)).chooseTreeNode(paths);
     }
 
-    @ActionTitle("fill.field")
+    @ActionTitle("sb.fill.field")
     public void fillField(String title, String value) {
         ((TextField) getComponentOperator(title)).setText(value);
     }
 
 
-    @ActionTitle("set.checkbox")
+    @ActionTitle("sb.set.checkbox")
     public void setCheckBox(String title, String value) {
         ((CheckBox) getComponentOperator(title)).setCheckBox(Boolean.valueOf(value));
     }
 
-    @ActionTitle("check.checkbox")
+    @ActionTitle("sb.check.checkbox")
     public void checkSelectedCheckBox(String title, String value) {
         assertThat("The component with title '" + title + "' is " + (Boolean.valueOf(value) ? "not " : "") + "selected.",
                 ((CheckBox) getComponentOperator(title)).isSelected(), is(Boolean.valueOf(value)));
     }
 
-    @ActionTitle("choose.combobox.item")
+    @ActionTitle("sb.choose.combobox.item")
     public void chooseComboBoxItem(String title, String value) {
         ((ComboBox) getComponentOperator(title)).chooseComboBoxItem(value, String::equals);
     }
 
 
-    @ActionTitle("check.component.editable")
+    @ActionTitle("sb.check.component.editable")
     public void checkComponentEditable(String title, String value) {
         boolean isEditable = false;
         ComponentOperator componentOperator = getComponentOperator(title);
