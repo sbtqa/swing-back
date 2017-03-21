@@ -2,11 +2,10 @@ package ru.sbtqa.tag.swingback.stepdefs;
 
 import cucumber.api.DataTable;
 import cucumber.api.java.en.And;
-import cucumber.api.java.ru.И;
 import org.netbeans.jemmy.operators.JTabbedPaneOperator;
 import ru.sbtqa.tag.swingback.AppManager;
-import ru.sbtqa.tag.swingback.exceptions.SwingBackRuntimeException;
 import ru.sbtqa.tag.swingback.TestContext;
+import ru.sbtqa.tag.swingback.exceptions.SwingBackRuntimeException;
 
 import java.util.concurrent.Callable;
 
