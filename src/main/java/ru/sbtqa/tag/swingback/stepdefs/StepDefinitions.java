@@ -2,11 +2,10 @@ package ru.sbtqa.tag.swingback.stepdefs;
 
 import cucumber.api.DataTable;
 import cucumber.api.java.en.And;
-import cucumber.api.java.ru.И;
 import org.netbeans.jemmy.operators.JTabbedPaneOperator;
 import ru.sbtqa.tag.swingback.AppManager;
-import ru.sbtqa.tag.swingback.exceptions.SwingBackRuntimeException;
 import ru.sbtqa.tag.swingback.TestContext;
+import ru.sbtqa.tag.swingback.exceptions.SwingBackRuntimeException;
 
 import java.util.concurrent.Callable;
 
@@ -17,8 +16,7 @@ public class StepDefinitions {
     /**
      * Start the application.
      */
-    @And("^user open the application$")
-    @И("(?:пользователь |он |)открывает приложение$")
+    @And("SBopenApp")
     public void startApp() {
         AppManager.getInstance().startApplication();
     }
@@ -26,14 +24,12 @@ public class StepDefinitions {
     /**
      * Closing of application
      */
-    @And("^user close the application$")
-    @И("(?:пользователь |он |)закрывает приложение$")
+    @And("sbCloseApp")
     public void closeApp() {
         AppManager.getInstance().stopApplication();
     }
 
-    @And("^opening form \"(.*?)\"$")
-    @И("^открывается форма \"(.*?)\"$")
+    @And("sbOpenForm")
     public void openForm(String title) {
         AppManager.getInstance().execute(new Callable<Object>() {
             @Override
@@ -50,8 +46,7 @@ public class StepDefinitions {
      * @param pane  pane name
      * @param title tabbed pane title
      */
-    @And("^user select the tab \"(.*?)\" on the tabbed pane \"(.*?)\"$")
-    @И("^(?:пользователь |он |)переходит на вкладку \"(.*?)\" в окне с вкалдками \"(.*?)\"$")
+    @And("sbMoveToTab")
     public void selectTabe(String pane, String title) {
         AppManager.getInstance().execute(new Callable<Object>() {
             @Override
@@ -68,8 +63,7 @@ public class StepDefinitions {
      *
      * @param wait
      */
-    @And("^wait (.*?) sec$")
-    @И("^ожидание (.*?) сек$")
+    @And("sbWait")
     public void wait(String wait) {
         try {
             SECONDS.sleep(Long.parseLong(wait));
@@ -85,8 +79,7 @@ public class StepDefinitions {
      *
      * @param action title of the action to execute
      */
-    @And("^(?:user |)\\((.*?)\\)$")
-    @И("^(?:пользователь |он)\\((.*?)\\)$")
+    @And("sbUserActionNoParams")
     public void userActionNoParams(String action) {
         AppManager.getInstance().execute(new Callable<Void>() {
             @Override
@@ -104,8 +97,7 @@ public class StepDefinitions {
      * @param action title of the action to execute
      * @param param  parameter
      */
-    @And("^(?:user |)\\((.*?)\\) (?:with param |)\"([^\"]*)\"$")
-    @И("^(?:пользователь |он)\\((.*?)\\) (?:с параметром |)\"([^\"]*)\"$")
+    @And("sbUserActionOneParam")
     public void userActionOneParam(String action, String param) {
         AppManager.getInstance().execute(new Callable<Object>() {
             @Override
@@ -124,8 +116,7 @@ public class StepDefinitions {
      * @param param1 first parameter
      * @param param2 second parameter
      */
-    @And("^user \\((.*?)\\) (?:with the parameters |)\"([^\"]*)\" \"([^\"]*)\"$")
-    @И("^(?:пользователь |он |)\\((.*?)\\) (?:с параметрарми |)\"([^\"]*)\" \"([^\"]*)\"$")
+    @And("sbUserActionTwoParams")
     public void userActionTwoParams(String action, String param1, String param2) {
         AppManager.getInstance().execute(new Callable<Void>() {
             @Override
@@ -145,8 +136,7 @@ public class StepDefinitions {
      * @param param2 second parameter
      * @param param3 third parameter
      */
-    @And("^user \\((.*?)\\) (?:with the parameters |)\"([^\"]*)\" \"([^\"]*)\" \"([^\"]*)\"$")
-    @И("^(?:пользователь |он |)\\((.*?)\\) (?:с параметрарми |)\"([^\"]*)\" \"([^\"]*)\" \"([^\"]*)\"$")
+    @And("sbUserActionThreeParams")
     public void userActionThreeParams(String action, String param1, String param2, String param3) {
         AppManager.getInstance().execute(new Callable<Void>() {
             @Override
@@ -164,8 +154,7 @@ public class StepDefinitions {
      * @param action    title of the action to execute
      * @param dataTable table of parameters
      */
-    @And("^user \\((.*?)\\) data$")
-    @И("^(?:пользователь |он |)\\((.*?)\\) данными$")
+    @And("sbUserActionTableParam")
     public void userActionTableParam(String action, DataTable dataTable) {
         AppManager.getInstance().execute(new Callable<Void>() {
             @Override
@@ -184,8 +173,7 @@ public class StepDefinitions {
      * @param param     parameter
      * @param dataTable table of parameters
      */
-    @And("^user \\((.*?)\\) [^\"]*\"([^\"]*) data$")
-    @И("^(?:пользователь |он |)\\((.*?)\\) [^\"]*\"([^\"]*)\" данными$")
+    @And("sbUserDoActionWithObject")
     public void userDoActionWithObject(String action, String param, DataTable dataTable) {
         AppManager.getInstance().execute(new Callable<Void>() {
             @Override

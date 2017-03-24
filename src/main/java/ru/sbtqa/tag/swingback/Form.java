@@ -1,6 +1,13 @@
 package ru.sbtqa.tag.swingback;
 
-import org.netbeans.jemmy.operators.*;
+import org.netbeans.jemmy.operators.ComponentOperator;
+import org.netbeans.jemmy.operators.JButtonOperator;
+import org.netbeans.jemmy.operators.JCheckBoxOperator;
+import org.netbeans.jemmy.operators.JTextComponentOperator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ru.sbtqa.tag.qautils.i18n.I18N;
+import ru.sbtqa.tag.qautils.i18n.I18NRuntimeException;
 import ru.sbtqa.tag.swingback.annotations.ActionTitle;
 import ru.sbtqa.tag.swingback.annotations.ActionTitles;
 import ru.sbtqa.tag.swingback.annotations.Component;
@@ -23,6 +30,8 @@ import static org.junit.Assert.assertThat;
  */
 public abstract class Form {
 
+    private static final Logger LOG = LoggerFactory.getLogger(Form.class);
+
     private String title;
     private List<Field> formFields;
     private List<Method> formMethods;
@@ -38,74 +47,57 @@ public abstract class Form {
     }
 
 
-    @ActionTitle("нажимает на кнопку")
-    @ActionTitle("push button")
+    @ActionTitle("sb.push.button")
     public void pushButton(String title) {
         ((Button) getComponentOperator(title)).push();
     }
 
-    @ActionTitle("проверяет, что таблица пуста")
-    @ActionTitle("check table is empty")
+    @ActionTitle("sb.table.is.empty")
     public void tableIsEmpty(String title) {
         assertThat("The table with title '" + title + "' is not empty.",
                 ((Table) getComponentOperator(title)).getRowCount(), is(0));
     }
 
-    @ActionTitle("нажимает на заголовок столбца")
-    @ActionTitle("click on table column title")
+    @ActionTitle("sb.click.table.column")
     public void clickOnTableColumnTitle(String title, String columnTitle) {
         ((Table) getComponentOperator(title)).clickOnTableColumnTitle(columnTitle);
     }
 
-    @ActionTitle("выделяет первую запись таблицы")
-    @ActionTitle("select first table row")
+    @ActionTitle("sb.select.first.table.row")
     public void selectFistTableElem(String title) {
         ((Table) getComponentOperator(title)).selectFistTableElem();
     }
 
-    @ActionTitle("разворачивает дерево")
-    @ActionTitle("expand tree")
+    @ActionTitle("sb.expand.tree")
     public void expandTree(String title, String path) {
         String[] paths = path.split("->");
         ((Tree) getComponentOperator(title)).chooseTreeNode(paths);
     }
 
-    @ActionTitle("заполняет поле")
-    @ActionTitle("fill field")
+    @ActionTitle("sb.fill.field")
     public void fillField(String title, String value) {
         ((TextField) getComponentOperator(title)).setText(value);
     }
 
 
-    @ActionTitle("устанавливает чекбокс")
-    @ActionTitle("set checkbox")
+    @ActionTitle("sb.set.checkbox")
     public void setCheckBox(String title, String value) {
         ((CheckBox) getComponentOperator(title)).setCheckBox(Boolean.valueOf(value));
     }
 
-    @ActionTitle("проверяет, что чекбокс выставлен")
-    @ActionTitle("check that checkbox is selected")
-    public void checkSelectedCheckBox(String title) {
-        assertThat("The checkbox with title '" + title + "' is not selected.",
-                ((CheckBox) getComponentOperator(title)).isSelected(), is(true));
+    @ActionTitle("sb.check.checkbox")
+    public void checkSelectedCheckBox(String title, String value) {
+        assertThat("The component with title '" + title + "' is " + (Boolean.valueOf(value) ? "not " : "") + "selected.",
+                ((CheckBox) getComponentOperator(title)).isSelected(), is(Boolean.valueOf(value)));
     }
 
-    @ActionTitle("проверяет, что чекбокс невыставлен")
-    @ActionTitle("check that checkbox is not selected")
-    public void checkUnSelectedCheckBox(String title) {
-        assertThat("The checkbox with title '" + title + "' is selected.",
-                ((CheckBox) getComponentOperator(title)).isSelected(), is(false));
-    }
-
-    @ActionTitle("выбирает элемент из выпадающего списка")
-    @ActionTitle("choose combobox item")
+    @ActionTitle("sb.choose.combobox.item")
     public void chooseComboBoxItem(String title, String value) {
         ((ComboBox) getComponentOperator(title)).chooseComboBoxItem(value, String::equals);
     }
 
 
-    @ActionTitle("проверяет редактируемость элемента")
-    @ActionTitle("check component editable")
+    @ActionTitle("sb.check.component.editable")
     public void checkComponentEditable(String title, String value) {
         boolean isEditable = false;
         ComponentOperator componentOperator = getComponentOperator(title);
@@ -173,23 +165,40 @@ public abstract class Form {
         }
 
         /**
-         * Check whether given method has {@link ActionTitle} annotation with required title
+         * Check whether given method has {@link ActionTitle} or
+         * {@link ActionTitles} annotation with required title
          *
          * @param method method to check
-         * @param title  required title
+         * @param title required title
          * @return true|false
          */
-        private static Boolean isRequiredAction(Method method, String title) {
+        private static Boolean isRequiredAction(Method method, final String title) {
             ActionTitle actionTitle = method.getAnnotation(ActionTitle.class);
             ActionTitles actionTitles = method.getAnnotation(ActionTitles.class);
             List<ActionTitle> actionList = new ArrayList<>();
+
             if (actionTitles != null) {
                 actionList.addAll(Arrays.asList(actionTitles.value()));
             }
             if (actionTitle != null) {
                 actionList.add(actionTitle);
             }
-            return actionList.stream().filter(action -> action.value().equals(title)).findFirst().isPresent();
+
+            for (ActionTitle action : actionList) {
+                String actionValue = action.value();
+                try {
+                    I18N i18n = I18N.getI18n(method.getDeclaringClass(), Bridge.getLocale(), I18N.DEFAULT_BUNDLE_PATH);
+                    actionValue = i18n.get(action.value());
+                } catch (I18NRuntimeException e) {
+                    LOG.debug("There is no bundle for translation class. Leave it as is", e);
+                }
+
+                if (actionValue.equals(title)) {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         /**
