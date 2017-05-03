@@ -12,6 +12,9 @@ public class SetUpStepDefinitions {
 
     @Before
     public void setUp() {
+        // Need to restart nano cloud
+        AppManager.clearAppManager();
+        //setting local through the bridge
         Locale locale = TagCucumber.getFeature().getI18n().getLocale();
         AppManager.getInstance().execute(new Callable<Void>() {
             @Override
