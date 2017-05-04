@@ -44,6 +44,10 @@ public class AppManager {
         }
         return instance;
     }
+    
+    public static void clearAppManager(){
+        instance = null;
+    }
 
     /**
      * Method run the application which is in filesystem
