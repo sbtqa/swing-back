@@ -1,4 +1,6 @@
-# Library for testing swing-application
+# Swing-back
+
+Swing-back it's a framework for automated testing swing-application using a PageObject pattern.
 
 ### Loading and starting test application
 
