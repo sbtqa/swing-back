@@ -2,6 +2,9 @@
 
 Swing-back it's a framework for automated testing swing-application using a PageObject pattern.
 
+
+Example project: https://github.com/sbtqa/swingback-test
+
 ### Loading and starting test application
 
 There are several ways to load required application for testing via the swing-back.
