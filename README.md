@@ -1,8 +1,16 @@
+<p align="right">
+English description | <a href="README_RU.md">Описание на русском</a>
+</p>
+
 # Swing-back
+[![Build Status](https://travis-ci.org/sbtqa/swing-back.svg?branch=master)](https://travis-ci.org/sbtqa/swing-back) [![GitHub release](https://img.shields.io/github/release/sbtqa/swing-back.svg?style=flat-square)](https://github.com/sbtqa/swing-back/releases) [![Maven Central](https://img.shields.io/maven-central/v/ru.sbtqa.tag/swing-back.svg)](https://mvnrepository.com/artifact/ru.sbtqa.tag/swing-back)
+
 Swing-back it's a framework for automated testing swing-application using a PageObject pattern.
 
+## Documentation
+### Test example
 
-Example project: https://github.com/sbtqa/swingback-test
+There is example of using the swing-back with comments [here](https://github.com/sbtqa/swingback-test)
 
 ### Loading and starting test application
 
@@ -52,8 +60,8 @@ There are some choosers in priority order for easy to use.
 
 You can write yourself chooser by analogy.
 
-### Test example
+## Contacts
+If you found error or you have a question? [Check](https://github.com/sbtqa/swing-back/issues), maybe someone asked before, not found? Just [create a new issue](https://github.com/sbtqa/swing-back/issues/new)!
 
-There is example of using the swing-back with comments.
-
-Look at
+## License 
+Page-Factory is released under the Apache 2.0. [Details here](https://github.com/sbtqa/swing-back/blob/master/LICENSE).
