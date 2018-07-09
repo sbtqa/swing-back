@@ -1,7 +1,6 @@
 package ru.sbtqa.tag.swingback.stepdefs;
 
 import cucumber.api.DataTable;
-import cucumber.api.java.en.And;
 import org.netbeans.jemmy.operators.JTabbedPaneOperator;
 import ru.sbtqa.tag.swingback.AppManager;
 import ru.sbtqa.tag.swingback.TestContext;
@@ -11,12 +10,11 @@ import java.util.concurrent.Callable;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
-public class StepDefinitions {
+public class GenericStepDefinitions extends SetUpStepDefinitions{
 
     /**
      * Start the application.
      */
-    @And("ru.sbtqa.tag.swingback.openApp")
     public void startApp() {
         AppManager.getInstance().startApplication();
     }
@@ -24,12 +22,15 @@ public class StepDefinitions {
     /**
      * Closing of application
      */
-    @And("ru.sbtqa.tag.swingback.CloseApp")
     public void closeApp() {
         AppManager.getInstance().stopApplication();
     }
 
-    @And("ru.sbtqa.tag.swingback.OpenForm")
+    /**
+     * Opens form with title
+     *
+     * @param title form title
+     */
     public void openForm(String title) {
         AppManager.getInstance().execute(new Callable<Object>() {
             @Override
@@ -46,7 +47,6 @@ public class StepDefinitions {
      * @param pane  pane name
      * @param title tabbed pane title
      */
-    @And("ru.sbtqa.tag.swingback.MoveToTab")
     public void selectTabe(String pane, String title) {
         AppManager.getInstance().execute(new Callable<Object>() {
             @Override
@@ -63,7 +63,6 @@ public class StepDefinitions {
      *
      * @param wait
      */
-    @And("ru.sbtqa.tag.swingback.Wait")
     public void wait(String wait) {
         try {
             SECONDS.sleep(Long.parseLong(wait));
@@ -79,7 +78,6 @@ public class StepDefinitions {
      *
      * @param action title of the action to execute
      */
-    @And("ru.sbtqa.tag.swingback.UserActionNoParams")
     public void userActionNoParams(String action) {
         AppManager.getInstance().execute(new Callable<Void>() {
             @Override
@@ -97,7 +95,6 @@ public class StepDefinitions {
      * @param action title of the action to execute
      * @param param  parameter
      */
-    @And("ru.sbtqa.tag.swingback.UserActionOneParam")
     public void userActionOneParam(String action, String param) {
         AppManager.getInstance().execute(new Callable<Object>() {
             @Override
@@ -116,7 +113,6 @@ public class StepDefinitions {
      * @param param1 first parameter
      * @param param2 second parameter
      */
-    @And("ru.sbtqa.tag.swingback.UserActionTwoParams")
     public void userActionTwoParams(String action, String param1, String param2) {
         AppManager.getInstance().execute(new Callable<Void>() {
             @Override
@@ -136,7 +132,6 @@ public class StepDefinitions {
      * @param param2 second parameter
      * @param param3 third parameter
      */
-    @And("ru.sbtqa.tag.swingback.UserActionThreeParams")
     public void userActionThreeParams(String action, String param1, String param2, String param3) {
         AppManager.getInstance().execute(new Callable<Void>() {
             @Override
@@ -154,7 +149,6 @@ public class StepDefinitions {
      * @param action    title of the action to execute
      * @param dataTable table of parameters
      */
-    @And("ru.sbtqa.tag.swingback.UserActionTableParam")
     public void userActionTableParam(String action, DataTable dataTable) {
         AppManager.getInstance().execute(new Callable<Void>() {
             @Override
@@ -173,7 +167,6 @@ public class StepDefinitions {
      * @param param     parameter
      * @param dataTable table of parameters
      */
-    @And("ru.sbtqa.tag.swingback.UserDoActionWithObject")
     public void userDoActionWithObject(String action, String param, DataTable dataTable) {
         AppManager.getInstance().execute(new Callable<Void>() {
             @Override

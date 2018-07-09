@@ -1,7 +1,8 @@
 package ru.sbtqa.tag.swingback.stepdefs;
 
+import cucumber.api.Scenario;
 import cucumber.api.java.Before;
-import ru.sbtqa.tag.cucumber.TagCucumber;
+import ru.sbtqa.tag.qautils.cucumber.CucumberUtils;
 import ru.sbtqa.tag.swingback.AppManager;
 import ru.sbtqa.tag.swingback.Bridge;
 
@@ -10,12 +11,15 @@ import java.util.concurrent.Callable;
 
 public class SetUpStepDefinitions {
 
+    Locale locale;
+
     @Before
-    public void setUp() {
+    public void setUp(Scenario scenario) {
         // Need to restart nano cloud
         AppManager.clearAppManager();
         //setting local through the bridge
-        Locale locale = TagCucumber.getFeature().getI18n().getLocale();
+
+        locale = CucumberUtils.getLocale(scenario);
         AppManager.getInstance().execute(new Callable<Void>() {
             @Override
             public Void call() throws Exception {
