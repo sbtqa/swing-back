@@ -13,7 +13,6 @@ public class SetUpStepDefinitions {
 
     Locale locale;
 
-    @Before
     public void setUp(Scenario scenario) {
         // Need to restart nano cloud
         AppManager.clearAppManager();

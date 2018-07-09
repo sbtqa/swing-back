@@ -1,10 +1,17 @@
 package ru.sbtqa.tag.swingback.stepdefs.en;
 
 import cucumber.api.DataTable;
+import cucumber.api.Scenario;
+import cucumber.api.java.Before;
 import cucumber.api.java.en.And;
 import ru.sbtqa.tag.swingback.stepdefs.GenericStepDefinitions;
 
 public class StepDefinitions extends GenericStepDefinitions {
+
+    @Before
+    public void setUp(Scenario scenario) {
+        super.setUp(scenario);
+    }
 
     /**
      * {@inheritDoc}
